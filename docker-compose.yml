@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"               # Maps host port 3000 to container port 3000
+    depends_on:
+      - server                   # Start backend before frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    networks:
+      - app-network
+
+  # Backend (FastAPI)
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8000:8000"               # Maps host port 8000 to container port 8000
+    depends_on:
+      - db                        # Ensure database starts before backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mydatabase
+    networks:
+      - app-network
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: hw6_postgres
+    environment:
+      POSTGRES_USER: p_user
+      POSTGRES_PASSWORD: p_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
+      - ./product_data.csv:/docker-entrypoint-initdb.d/product_data.csv
+    networks:
+      - app-network
+volumes:
+  postgres-data:
+networks:
+  app-network:
