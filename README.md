@@ -18,6 +18,6 @@ Ensure that you have Docker and Docker Compose installed on your system to easil
    docker-compose up
 
 
-Frontend (Client): http://localhost:3000
-Backend (Server): http://localhost:8000
+### Frontend (Client): http://localhost:3000
+### Backend (Server): http://localhost:8000
 
