@@ -81,23 +81,6 @@ async def root(db: Session = Depends(get_db)):
         print(error)
         raise HTTPException(status_code=500, detail="Database connection failed.")
 
-# Route to get the count of products
-@app.get("/products/count")
-async def get_product_count(db: Session = Depends(get_db)):
-    count = db.query(ProductDB).count()
-    return {"count": count}
-
-# Route to get paginated products
-@app.get("/products", response_model=List[Product])
-async def get_products(
-    page: int = Query(1, ge=1),
-    limit: int = Query(10, le=100),
-    db: Session = Depends(get_db),
-):
-    offset = (page - 1) * limit
-    products = db.query(ProductDB).offset(offset).limit(limit).all()
-    return products
-
 # Route to get a product by its ID
 @app.get("/products/{product_id}", response_model=Product)
 async def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
