@@ -1,20 +1,11 @@
-CREATE DATABASE product_db;
+CREATE DATABASE CS391;
 
-\c product_db
+\c CS391
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS USERS (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    description TEXT,
-    price DECIMAL(10, 2),
-    created_at TIMESTAMP DEFAULT NOW()
-);
-CREATE TABLE USERS (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    email VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     created_at TIMESTAMP DEFAULT NOW()
-);  
-COPY products(name, description, price)
-FROM '/docker-entrypoint-initdb.d/product_data.csv' DELIMITER ',' CSV HEADER;
+);

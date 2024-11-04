@@ -14,39 +14,40 @@ from contextlib import asynccontextmanager
 # ======================================== Database Setup ========================================
 
 # Database connection details
-DATABASE_URL = "postgresql://p_user:p_password@localhost:5432/product_db"
+DATABASE_URL = "postgresql://p_user:p_password@localhost:5432/cs391"
 # Establishing a connection to the database
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# ProductDB model for SQLAlchemy
-class ProductDB(Base):
-    __tablename__ = "products"
+# UserDB model for SQLAlchemy
+class UserDB(Base):
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    price = Column(Float)
-    description = Column(String)
+    name = Column(String)
+    email = Column(String, unique=True)  
+    password = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 # Pydantic model for API responses
-class Product(BaseModel):
+Base.metadata.create_all(bind=engine)
+class UserRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
     id: int
     name: str
-    price: float
-    description: str
+    email: str
     created_at: datetime
 
     class Config:
         orm_mode = True
-class ProductResponse(BaseModel):
-    id: int
-    name: str
-    price: float
-    description: str
-    created_at: datetime
-    class Config:
-        orm_mode = True
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+# ======================================== Dependency Injection =================================
 # Dependency to get a new database session for each request
 def get_db():
     db = SessionLocal()
@@ -71,34 +72,51 @@ app.add_middleware(
 
 # ============================================ Routing ============================================
 
-# Root route to test database connection
-@app.get("/")
-async def root(db: Session = Depends(get_db)):
+# Route to create a new user
+@app.post("/user", response_model=UserResponse)
+async def create_user(user: UserRequest, db: Session = Depends(get_db)):
     try:
-        db.execute("SELECT 1")
-        return {"message": "Hello World! Database connection is successful."}
+        NewUser = UserDB(name=user.name, email=user.email, password=user.password)
+        db.add(NewUser)
+        db.commit()
+        db.refresh(NewUser)
+        return UserResponse(**NewUser.__dict__)
     except Exception as error:
         print(error)
-        raise HTTPException(status_code=500, detail="Database connection failed.")
-
-# Route to get a product by its ID
-@app.get("/products/{product_id}", response_model=Product)
-async def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
-    product = db.query(ProductDB).filter(ProductDB.id == product_id).first()
-    if product is None:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product
-@app.post("/products", response_model=ProductResponse, status_code=201)
-async def create_product(product: Product, db: Session = Depends(get_db)):
-    try:
-        new_product = ProductDB(**product.model_dump(exclude={"likes"}))
-        db.add(new_product)
-        db.commit()
-        db.refresh(new_product)
-        return new_product
-    except Exception as error:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Failed to create product: {error}")
+        raise HTTPException(status_code=500, detail=f"Failed to create user. {error}")
+# Route to get all users
+@app.get("/users/",response_model=List[UserResponse])
+async def get_users(db: Session = Depends(get_db)):
+    try:
+        users = db.query(UserDB).all()
+        return users
+    except Exception as error:
+        print(error)
+        raise HTTPException(status_code=500, detail=f"Failed to fetch users. {error}")
+# Route to get a user by ID
+@app.get("/user/{user_id}", response_model=UserResponse)
+async def get_user(user_id: int, db: Session = Depends(get_db)):
+    try:
+        user = db.query(UserDB).filter(UserDB.id == user_id).first()
+        if user:
+            return user
+        else:
+            raise HTTPException(status_code=404, detail="User not found.")
+    except Exception as error:
+        print(error)
+        raise HTTPException(status_code=500, detail=f"Failed to fetch user. {error}")
+@app.post("/login", response_model=bool)
+async def login_user(user: LoginRequest, db: Session = Depends(get_db)):
+    try:
+        user = db.query(UserDB).filter(UserDB.email == user.email).filter(UserDB.password == user.password).first()
+        if user:
+            return True
+        else:
+            return False
+    except Exception as error:
+        print(error)
+        raise HTTPException(status_code=500, detail=f"Failed to fetch user. {error}")
 # ======================================== Run the App ============================================
     
 if __name__ == "__main__":
