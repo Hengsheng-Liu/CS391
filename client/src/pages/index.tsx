@@ -5,10 +5,9 @@ const {Title} = Typography;
 
 const { Header, Content, Footer } = Layout;
 
-const items = new Array(15).fill(null).map((_, index) => ({
-  key: index + 1,
-  label: `nav ${index + 1}`,
-}));
+const items = [{key: 0, label: 'Home'}, 
+               {key: 1, label: 'Create an Event'},
+               {key: 2, label: 'Profile'}];
 
 export default function Home() {
   return (
