@@ -5,7 +5,7 @@ class EventCreate(BaseModel):
     name: str
     date: datetime
     title: str
-    type_of_food: str
+    food_type: str
     description: str
 
 class EventResponse(BaseModel):
@@ -13,7 +13,7 @@ class EventResponse(BaseModel):
     name: str
     date: datetime
     title: str
-    type_of_food: str
+    food_type: str
     description: str
     created_at: datetime
 
