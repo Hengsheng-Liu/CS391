@@ -29,10 +29,12 @@ Ensure that you have Docker and Docker Compose installed on your system to easil
 6. Start the FastAPI server:
    ```bash
    pipenv run python main.py
-8. Navigate to the client folder and start the frontend application:
+7. Navigate to the client folder and install need packages:
+   ```bash
+   npm install
+8. Start the Front end application:
    ```bash
    npm run dev
-
 
 - #### Frontend (Client):
    ```bash
