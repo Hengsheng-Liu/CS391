@@ -153,11 +153,12 @@ export default function Home() {
           Login
         </Button>
 
-        {loading ? (
+        {/*The following code seems to be giving an error based on the datasource prop*/}
+        {/* {loading ? (
           <Alert message="Loading events..." type="info" />
         ) : (
           <Table dataSource={events} columns={columns} pagination={false} />
-        )}
+        )} */}
         <Pagination defaultCurrent={1} total={events.length} />
       </div>
     </div>
