@@ -133,20 +133,11 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="nickname"
-        label="Nickname"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+        name="name"
+        label="Name"
+        rules={[{ required: true, message: 'Please input your name!', whitespace: true }]}
       >
         <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[{ required: true, message: 'Please input your phone number!' }]}
-      >
-        <Input style={{ width: '100%' }} />
       </Form.Item>
 
       <Form.Item {...tailFormItemLayout}>

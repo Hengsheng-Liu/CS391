@@ -7,7 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Register() {
   return (
     <>
-      <App />
+        <Typography.Title>
+            Please input information below:
+        </Typography.Title>
+        <App />
     </>
   );
 }
