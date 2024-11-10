@@ -48,7 +48,27 @@ const tailFormItemLayout = {
 const App: React.FC = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
+
+    try {
+      const response = await fetch('http://localhost:8000/users/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log('Success:', result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
     console.log('Received values of form: ', values);
     alert("Hello");
   };
@@ -74,7 +94,7 @@ const App: React.FC = () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }}
+      /* initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }} */
       style={{ maxWidth: 600 }}
       scrollToFirstError
     >
