@@ -63,14 +63,15 @@ const App: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
+      form.resetFields();
+      alert("User successfully registered!");
+
       const result = await response.json();
       console.log('Success:', result);
     } catch (error) {
       console.error('Error:', error);
+      alert("Registration was unsuccessful.");
     }
-
-    console.log('Received values of form: ', values);
-    alert("Hello");
   };
 
   const [autoCompleteResult, setAutoCompleteResult] = useState<string[]>([]);
@@ -94,7 +95,6 @@ const App: React.FC = () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      /* initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }} */
       style={{ maxWidth: 600 }}
       scrollToFirstError
     >
