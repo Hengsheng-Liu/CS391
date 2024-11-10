@@ -14,7 +14,6 @@ import {
   Col,
   Row,
 } from "antd";
-import App from "../components/Registration";
 
 const { Title } = Typography;
 
@@ -95,8 +94,8 @@ export default function Home() {
 
   return (
     <div>
-      <Layout style={{ height: "100vh" }}>
-        <Header style={{ display: "flex", alignItems: "center" }}>
+      {/* <Layout style={{ height: "100vh" }}> */}
+        {/* <Header style={{ display: "flex", alignItems: "center" }}>
           <Title
             level={2}
             style={{ color: "grey", alignContent: "center", padding: "0 12px" }}
@@ -110,7 +109,7 @@ export default function Home() {
             items={items}
             style={{ flex: 1, minWidth: 0 }}
           />
-        </Header>
+        </Header> */}
         <Content style={{ padding: "0 48px" }}>
           <Title level={2}>Current Events</Title>
           <Divider />
@@ -133,14 +132,13 @@ export default function Home() {
               </Col>
             </Row>
           </div>
-          <App/>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
+        {/* <Footer style={{ textAlign: "center" }}>
           Spark! Bytes ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
-      </Layout>
+      </Layout> */}
 
-      <div style={{ padding: 20 }}>
+      {/* <div style={{ padding: 20 }}>
         <Typography.Title level={2}>Welcome to SparkBytes</Typography.Title>
         <Typography.Paragraph>
           Find free food events happening on campus!
@@ -156,14 +154,14 @@ export default function Home() {
           Login
         </Button>
 
-        {/*The following code seems to be giving an error based on the datasource prop*/}
-        {/* {loading ? (
+        The following code seems to be giving an error based on the datasource prop
+        {loading ? (
           <Alert message="Loading events..." type="info" />
         ) : (
           <Table dataSource={events} columns={columns} pagination={false} />
-        )} */}
+        )}
         <Pagination defaultCurrent={1} total={events.length} />
-      </div>
+      </div> */}
     </div>
   );
 }
