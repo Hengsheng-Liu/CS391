@@ -50,25 +50,8 @@ const App: React.FC = () => {
 
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
+    alert("Hello");
   };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  );
-
-  const suffixSelector = (
-    <Form.Item name="suffix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="USD">$</Option>
-        <Option value="CNY">¥</Option>
-      </Select>
-    </Form.Item>
-  );
 
   const [autoCompleteResult, setAutoCompleteResult] = useState<string[]>([]);
 
@@ -163,32 +146,13 @@ const App: React.FC = () => {
         label="Phone Number"
         rules={[{ required: true, message: 'Please input your phone number!' }]}
       >
-        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+        <Input style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item
-        name="intro"
-        label="Intro"
-        rules={[{ required: true, message: 'Please input Intro' }]}
-      >
-        <Input.TextArea showCount maxLength={100} />
-      </Form.Item>
-
-      <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[{ required: true, message: 'Please input the captcha you got!' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get captcha</Button>
-          </Col>
-        </Row>
+      <Form.Item {...tailFormItemLayout}>
+        <Button type="primary" htmlType="submit">
+          Register
+        </Button>
       </Form.Item>
     </Form>
   );

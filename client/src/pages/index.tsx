@@ -14,6 +14,7 @@ import {
   Col,
   Row,
 } from "antd";
+import App from "../components/Registration";
 
 const { Title } = Typography;
 
@@ -132,11 +133,13 @@ export default function Home() {
               </Col>
             </Row>
           </div>
+          <App/>
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Spark! Bytes ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
       </Layout>
+
       <div style={{ padding: 20 }}>
         <Typography.Title level={2}>Welcome to SparkBytes</Typography.Title>
         <Typography.Paragraph>
