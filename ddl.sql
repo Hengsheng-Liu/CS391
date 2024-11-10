@@ -9,3 +9,17 @@ CREATE TABLE IF NOT EXISTS USERS (
     password VARCHAR(255),
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS EVENTS (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    location VARCHAR(255),
+    food_type VARCHAR(255),
+    rsvp_count INT,
+    servings INT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expiration TIMESTAMP,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
+);

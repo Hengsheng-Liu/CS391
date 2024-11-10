@@ -1,16 +1,19 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-# EventDB class to create events table in database.
 class EventDB(Base):
-    __tablename__ = 'events'
+    __tablename__ = "events"
+    
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    date = Column(DateTime, nullable=False)
-    title = Column(String, nullable=False)
     food_type = Column(String, nullable=False)
-    description = Column(String, nullable=True)
+    description = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    rsvp_count = Column(Integer, nullable=False)
+    servings = Column(Integer, nullable=False)
+    expiration = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
