@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from schemas.event import EventCreate, EventResponse
 from database import get_db
-from crud.event import create_event, get_event, get_events, get_event_by_food_type
+from crud.event import create_event, delete_event, get_event, get_events, get_event_by_food_type
 
 router = APIRouter()
 
@@ -17,7 +17,14 @@ async def create_event_route(event: EventCreate, db: Session = Depends(get_db)):
         db.rollback()
         print(error)
         raise HTTPException(status_code=500, detail=f"Failed to create event. {error}")
-
+@router.delete("/event/{event_id}")
+async def delete_event_route(event_id: int, db: Session = Depends(get_db)):
+    try:
+        delete_event(db, event_id)
+        return {"message": "Event deleted successfully."}
+    except Exception as error:
+        print(error)
+        raise HTTPException(status_code=500, detail=f"Failed to delete event. {error}")
 # Route to get all events
 @router.get("/events", response_model=List[EventResponse])
 async def get_events_route(db: Session = Depends(get_db)):
@@ -28,8 +35,9 @@ async def get_events_route(db: Session = Depends(get_db)):
         print(error)
         raise HTTPException(status_code=500, detail=f"Failed to fetch events. {error}")
 
+
 # Route to get an event by ID
-@router.get("/events/id/{event_id}", response_model=EventResponse)
+@router.get("/event/id/{event_id}", response_model=EventResponse)
 async def get_event_route(event_id: int, db: Session = Depends(get_db)):
     try:
         event = get_event(db, event_id)
@@ -50,3 +58,4 @@ async def get_event_by_food_type_route(food_type: str, db: Session = Depends(get
     except Exception as error:
         print(error)
         raise HTTPException(status_code=500, detail=f"Failed to fetch events. {error}")
+

@@ -24,3 +24,8 @@ def get_event_by_food_type(db: Session, food_type: str):
 #Create all events
 def get_events(db: Session, skip: int = 0, limit: int = 10):
     return db.query(EventDB).offset(skip).limit(limit).all()
+
+def delete_event(db: Session, event_id: int):
+    db.query(EventDB).filter(EventDB.id == event_id).delete()
+    db.commit()
+    return {"message": "Event deleted successfully."}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 from models.user import UserDB
@@ -27,14 +27,18 @@ async def create_user(user: UserRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Failed to create user." + str(error))
 # Route to login a user
 @router.get("/user", response_model=UserResponse)
-async def login_user(user: LoginRequest, db: Session = Depends(get_db)):
+async def login_user(
+    email: str = Query(..., description="User email for login"), 
+    password: str = Query(..., description="User password for login"), 
+    db: Session = Depends(get_db)):
     try:
-        user = db.query(UserDB).filter(UserDB.email == user.email).filter(UserDB.password == user.password).first()
+        user = db.query(UserDB).filter(UserDB.email == email, UserDB.password == password).first()
         if user:
-            return UserResponse(**user.__dict__)
+            return user
         else:
             raise HTTPException(status_code=404, detail="User not found.")
     except Exception as error:
+        print(error)
         raise HTTPException(status_code=500, detail=f"Failed to fetch user. {error}")
 # Route to get all users
 @router.get("/users/",response_model=List[UserResponse])
