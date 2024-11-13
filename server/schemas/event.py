@@ -9,8 +9,9 @@ class EventCreate(BaseModel):
     rsvp_count: int
     servings: int
     expiration: datetime
-    created_at: datetime 
-
+    created_at: datetime
+    host_id: int
+    create_by: str 
     class Config:
         orm_mode = True
 
@@ -24,6 +25,8 @@ class EventResponse(BaseModel):
     servings: int
     expiration: datetime
     created_at: datetime
+    host_id: int
+    create_by: str
 
     class Config:
         orm_mode = True

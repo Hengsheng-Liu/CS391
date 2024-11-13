@@ -17,3 +17,5 @@ class EventDB(Base):
     servings = Column(Integer, nullable=False)
     expiration = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    host_id = Column(Integer, nullable=False)
+    create_by = Column(String, nullable=False)
