@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS USERS (
 CREATE TABLE IF NOT EXISTS EVENTS (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    description TEXT,
+    description VARCHAR(255),
     location VARCHAR(255),
     food_type VARCHAR(255),
     rsvp_count INT,

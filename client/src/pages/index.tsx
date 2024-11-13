@@ -14,7 +14,6 @@ import {
   Col,
   Row,
 } from "antd";
-
 const { Title } = Typography;
 
 interface Event {
@@ -27,10 +26,12 @@ interface Event {
 }
 
 export default function Home() {
+
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    
     const fetchEvents = async () => {
       try {
         const response = await fetch("http://localhost:8000/events/events");

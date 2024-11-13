@@ -1,13 +1,23 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { Layout } from "antd";
-import CustomHeader from "./header";
+import CustomHeader from "../components/header";
+import { useAuth } from "@/contexts/UserContext";
+import {useRouter } from "next/router";
 const { Content, Footer } = Layout;
 //You'll need to edit this component
 const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  const router = useRouter();
+  const lastPart = router.pathname.split('/').filter(Boolean).pop();
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user, router]);
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
-      <CustomHeader />
+      {lastPart !== "login" && <CustomHeader />}
       <Content style={{ padding: "0 50px", marginTop: 64 }}>
         <div
           className="site-layout-content"
