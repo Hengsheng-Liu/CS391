@@ -32,7 +32,6 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.log(data);
         throw new Error(data.detail || 'Error during authentication');
       }
       setUser(data);
