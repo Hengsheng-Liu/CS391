@@ -7,7 +7,7 @@ const { Header } = Layout;
 const CustomHeader = () => {
   // You'll need to edit this array
   const {user} = useAuth();
-  const menuItems: { key: string; label: string; href?: string , disabled?:boolean}[] = [
+  const menuItems: { key: string; label: string; href: string , disabled?:boolean}[] = [
     // each menu item must contain:
     // key: unique string (should be integer-like, e.g. '0' or '1')
     // label: string
@@ -16,8 +16,7 @@ const CustomHeader = () => {
     { key: '1', label: 'Post', href: '/post' },
     { key: '2', label: 'Register', href: '/register' },
     { key: '3', label: 'Profile', href: '/profile' },
-    { key: '4', label: user?.name || "",  disabled: true, },
-    
+    { key: '4', label: user?.name || "",  href: '', disabled: true },
   ];
   // Don't touch this code, use it in your Menu component from Antd
   const router = useRouter();

@@ -1,11 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 const Backend = "http://localhost:8000";
 
-interface ResponseData {
-    id: number;
-    email: string;
-    name: string;
-}
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,14 +18,8 @@ export default async function handler(
 
     if (signUp === false) {
       // Handle login
-      const response = await fetch(`${Backend}/users/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await fetch(`${Backend}/users/user?email=${email}&password=${password}`, {
       });
-
       const data = await response.json();
 
       if (!response.ok) {
