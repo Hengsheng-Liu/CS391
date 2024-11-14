@@ -20,8 +20,9 @@ Ensure that you have Docker and Docker Compose installed on your system to easil
 
 1. Clone the repository and navigate to the project directory.
 2. Ensure you have `pipenv` installed. You can find installation instructions here: [Pipenv Installation](https://pipenv.pypa.io/en/latest/installation.html).
-4. Run the following command to start the database container:
+4. Run the following commands to start the database container:
    ```bash
+   docker compose down --volumes
    docker compose up
 5. Navigate to the server folder and install the Python dependencies:
    ```bash 
