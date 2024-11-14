@@ -1,57 +1,23 @@
-
-//import { useRouter } from 'next/router';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/contexts/UserContext';
+import { useEffect } from 'react';
 
 import { Form, Input, Button, Typography, message } from 'antd';
 
 const { Title } = Typography;
 
-/* export default function LoginPage() {
-  const [signUp, setSignUp] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
-  const { setUser } = useAuth();
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(''); 
-
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const name = formData.get('name') as string;
-    const confirmPassword = formData.get('ConfirmPassword') as string;
-
-    if (signUp && password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, signUp }),
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || 'Error during authentication');
-      }
-      setUser(data);
-      router.push('/');
-    } catch (error: any) {
-      setError(error.message);
-    }
-  } */
-
 export default function LoginPage() {
   const [signUp, setSignUp] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
-  const [form] = Form.useForm();
+  const { user, setUser } = useAuth();
+  const [form] = Form.useForm();  
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [useAuth().user]);
 
   async function handleSubmit(values: any) {
     try {
@@ -72,11 +38,7 @@ export default function LoginPage() {
       if (!response.ok) {
         throw new Error(data.detail || 'Error during authentication');
       }
-      console.log('Before setting user');
       setUser(data);
-      console.log('Before router.push');
-      router.push('/');
-      console.log('After router.push');
     } catch (error: any) {
       message.error(error.message);
     }
