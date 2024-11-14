@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import type { CascaderProps } from 'antd';
 import {
   AutoComplete,
   Button,
@@ -12,14 +11,6 @@ import {
   Row,
   Select,
 } from 'antd';
-
-const { Option } = Select;
-
-interface DataNodeType {
-  value: string;
-  label: string;
-  children?: DataNodeType[];
-}
 
 const formItemLayout = {
   labelCol: {
