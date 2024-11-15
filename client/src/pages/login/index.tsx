@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/UserContext';
 import { useEffect } from 'react';
@@ -8,16 +8,16 @@ import { Form, Input, Button, Typography, message } from 'antd';
 const { Title } = Typography;
 
 export default function LoginPage() {
+  const { user, setUser } = useAuth();
   const [signUp, setSignUp] = useState(false);
   const router = useRouter();
-  const { user, setUser } = useAuth();
   const [form] = Form.useForm();  
 
   useEffect(() => {
-    if (user) {
+    if (user && router.pathname !== '/') {
       router.push('/');
     }
-  }, [useAuth().user]);
+  }, [user, router.pathname]);
 
   async function handleSubmit(values: any) {
     try {
