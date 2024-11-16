@@ -108,22 +108,9 @@ export default function Home() {
         key: "servings",
       },
       {
-        title: "Actions",
-        key: "actions",
-        render: (_: any, record: Event) => (
-          record.host_id === Number(user?.id) && ( 
-            <Popconfirm
-              title="Are you sure you want to delete this event?"
-              onConfirm={() => handleDelete(record.id)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="primary" danger>
-                Delete
-              </Button>
-            </Popconfirm>
-          )
-        ),
+        title: "RSVP Count",
+        dataIndex: "rsvp_count",
+        key: "rsvp_count",
       },
     ];
 

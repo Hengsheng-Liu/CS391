@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.user import UserDB
+from model import UserDB
 from schemas.user import UserRequest
 
 #Get user by ID

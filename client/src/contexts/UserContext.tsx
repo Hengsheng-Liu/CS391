@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import { useRouter } from 'next/router';
 
 interface User{
-  id: string;
+  id: number;
   email: string;
   name: string;
 }

@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from database import engine
-from models.user import Base as UserBase
-from models.event import Base as EventBase
+
 from routers.user import router as user_router
 from routers.event import router as event_router
+from routers.rsvp import router as rsvp_router
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -19,13 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create database tables
-UserBase.metadata.create_all(bind=engine)
-EventBase.metadata.create_all(bind=engine)
 
 # Include routers
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(event_router, prefix="/events", tags=["events"])
+app.include_router(rsvp_router, prefix="/rsvp", tags=["rsvp"])
 
 # Run the app
 if __name__ == "__main__":

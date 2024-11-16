@@ -23,3 +23,10 @@ CREATE TABLE IF NOT EXISTS EVENTS (
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
+CREATE TABLE IF NOT EXISTS RSVP (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    event_id INT,
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (event_id) REFERENCES EVENTS(id)
+);
