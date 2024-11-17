@@ -5,7 +5,7 @@ import CustomHeader from "../components/header";
 import { useAuth } from "@/contexts/UserContext";
 import {useRouter } from "next/router";
 const { Content, Footer } = Layout;
-//You'll need to edit this component
+
 const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const router = useRouter();
@@ -14,7 +14,7 @@ const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
     if (!user) {
       router.push("/login");
     }
-  }, [user, router]);
+  }, []);
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
       {lastPart !== "login" && <CustomHeader />}
