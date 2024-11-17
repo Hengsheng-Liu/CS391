@@ -1,23 +1,45 @@
 "use client";
-import React, { use, useEffect } from "react";
-import { Layout } from "antd";
+import React, { useEffect } from "react";
+import { Layout, Spin } from "antd";
 import CustomHeader from "../components/header";
 import { useAuth } from "@/contexts/UserContext";
-import {useRouter } from "next/router";
+import { useRouter } from "next/router";
 const { Content, Footer } = Layout;
 
 const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const lastPart = router.pathname.split('/').filter(Boolean).pop();
+  const isPublicRoute = lastPart === "login";
+
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user && !isPublicRoute) {
       router.push("/login");
     }
-  }, []);
+  }, [user, loading, isPublicRoute]);
+
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  // Don't render anything while redirecting
+  if (!loading && !user && !isPublicRoute) {
+    return null;
+  }
+
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
-      {lastPart !== "login" && <CustomHeader />}
+      {!isPublicRoute && <CustomHeader />}
       <Content style={{ padding: "0 50px", marginTop: 64 }}>
         <div
           className="site-layout-content"

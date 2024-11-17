@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, List, Button, Tabs, Tag } from "antd";
+import { Typography, Card, List, Button, Tabs, Tag, Spin } from "antd";
 import { useAuth } from "@/contexts/UserContext";
 import { useRouter } from "next/router";
 
@@ -18,44 +18,49 @@ interface Event {
 }
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
   const [rsvpedEvents, setRsvpedEvents] = useState<Event[]>([]);
   const [activeTab, setActiveTab] = useState('1');
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
+    if (!loading && !user) {
+      router.push('/login');
       return;
     }
 
-    // Fetch events created by the user
-    const fetchCreatedEvents = async () => {
-      try {
-        const response = await fetch("/api/events");
-        const data = await response.json();
-        const userEvents = data.filter((event: Event) => event.host_id === user.id);
-        setCreatedEvents(userEvents);
-      } catch (error) {
-        console.error("Error fetching created events:", error);
-      }
-    };
+    // Only fetch events if we have a user
+    if (user?.id) {
+      const fetchEvents = async () => {
+        try {
+          const response = await fetch("/api/events");
+          const data = await response.json();
+          // Filter events for the current user
+          const userEvents = data.filter((event: Event) => event.host_id === user.id);
+          setCreatedEvents(userEvents);
+        } catch (error) {
+          console.error("Error fetching events:", error);
+        }
+      };
 
-    // Fetch events the user has RSVP'd to
-    const fetchRsvpedEvents = async () => {
-      try {
-        const response = await fetch(`/api/rsvp?user_id=${user.id}`);
-        const data = await response.json();
-        setRsvpedEvents(data);
-      } catch (error) {
-        console.error("Error fetching RSVPed events:", error);
-      }
-    };
+      fetchEvents();
+    }
+  }, [user, loading, router]);
 
-    fetchCreatedEvents();
-    fetchRsvpedEvents();
-  }, [user]);
+  // Show loading state
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  // If no user, don't render anything (redirect will happen in useEffect)
+  if (!user) {
+    return null;
+  }
 
   const EventList = ({ events, type }: { events: Event[], type: string }) => (
     <List
@@ -88,7 +93,6 @@ export default function Profile() {
     />
   );
 
-  // Define tabs items
   const items = [
     {
       key: '1',
@@ -115,7 +119,7 @@ export default function Profile() {
               Name
             </Typography.Text>
             <Typography.Text style={{ fontSize: "18px" }}>
-              {user?.name || "Not provided"}
+              {user.name}
             </Typography.Text>
           </div>
 
@@ -124,7 +128,7 @@ export default function Profile() {
               Email
             </Typography.Text>
             <Typography.Text style={{ fontSize: "18px" }}>
-              {user?.email || "Not provided"}
+              {user.email}
             </Typography.Text>
           </div>
 
