@@ -27,7 +27,7 @@ const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Spark! ©{new Date().getFullYear()} Created by Spark!
+        Spark!Bytes ©{new Date().getFullYear()} Created by Spark!
       </Footer>
     </Layout>
   );
