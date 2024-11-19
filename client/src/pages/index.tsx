@@ -120,7 +120,7 @@ export default function Home() {
         <Typography.Paragraph>
           Find free food events happening on campus!
         </Typography.Paragraph>
-        The following code seems to be giving an error based on the datasource prop
+        {/* The following code seems to be giving an error based on the datasource prop */}
         {loading ? (
           <Alert message="Loading events..." type="info" />
         ) : (
