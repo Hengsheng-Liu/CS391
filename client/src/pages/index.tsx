@@ -103,12 +103,12 @@ export default function Home() {
         render: (text: string) => new Date(text).toLocaleString(), 
       },
       {
-        title: "Servings Available",
+        title: "Total Servings",
         dataIndex: "servings",
         key: "servings",
       },
       {
-        title: "RSVP Count",
+        title: "RSVP Spots Left",
         dataIndex: "rsvp_count",
         key: "rsvp_count",
       },
