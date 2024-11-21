@@ -100,7 +100,7 @@ export default function LoginPage() {
           </Button>
         </Form.Item>
       </Form>
-      <Button onClick={() => setSignUp(!signUp)} style={{ width: '100%' }}>
+      <Button onClick={() => setSignUp(!signUp)} style={{ width: '100%'}}>
         {signUp ? 'Already have an account? Log In' : 'New User? Sign Up'}
       </Button>
     </div>
