@@ -44,6 +44,13 @@ export default function LoginPage() {
     }
   }
 
+  const validateEmailDomain = (rule: any, value: string) => {
+    if (value && !value.endsWith('@bu.edu')) {
+      return Promise.reject('The input is not a valid @bu.edu email!');
+    } else {
+      return Promise.resolve();
+    }};
+
   return (
     <div style={{ maxWidth: 400, margin: '0 auto' }}>
       <Title level={2}>{signUp ? 'Sign Up' : 'Log In'}</Title>
@@ -62,7 +69,8 @@ export default function LoginPage() {
           label="Email"
           rules={[
             { required: true, message: 'Please input your email!' },
-            { type: 'email', message: 'Please enter a valid email!' }
+            { type: 'email', message: 'Please enter a @bu.edu email!' },
+            { validator: validateEmailDomain}
           ]}
         >
           <Input />
