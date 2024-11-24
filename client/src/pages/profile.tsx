@@ -15,6 +15,15 @@ interface Event {
   created_at: string;
   host_id: number;
   create_by: string;
+  participants: User[];
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  member_since: string;
 }
 
 export default function Profile() {
@@ -30,15 +39,31 @@ export default function Profile() {
       return;
     }
 
-    // Only fetch events if we have a user
     if (user?.id) {
       const fetchEvents = async () => {
         try {
-          const response = await fetch("/api/events");
-          const data = await response.json();
-          // Filter events for the current user
-          const userEvents = data.filter((event: Event) => event.host_id === user.id);
+          // Fetch all events
+          const eventsResponse = await fetch("/api/events");
+          const eventsData = await eventsResponse.json();
+          
+          // Filter events created by the user
+          const userEvents = eventsData.filter((event: Event) => event.host_id === user.id);
           setCreatedEvents(userEvents);
+
+          // For each event, fetch its detailed version that includes participants
+          const detailedEvents = await Promise.all(
+            eventsData.map(async (event: Event) => {
+              const detailResponse = await fetch(`/api/events/${event.id}`);
+              return detailResponse.json();
+            })
+          );
+
+          // Filter events where the user is a participant
+          const userRsvpedEvents = detailedEvents.filter((event: Event) => 
+            event.participants?.some((participant: User) => participant.id === user.id)
+          );
+          
+          setRsvpedEvents(userRsvpedEvents);
         } catch (error) {
           console.error("Error fetching events:", error);
         }
