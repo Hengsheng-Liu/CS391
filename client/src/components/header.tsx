@@ -1,26 +1,19 @@
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Button } from "antd";
 import { MenuInfo } from "rc-menu/lib/interface";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/UserContext";
 const { Header } = Layout;
+
 const CustomHeader = () => {
-  // You'll need to edit this array
-  const {user} = useAuth();
-  const menuItems: { key: string; label: string; href: string , disabled?:boolean}[] = [
-    // each menu item must contain:
-    // key: unique string (should be integer-like, e.g. '0' or '1')
-    // label: string
-    // href: string (route path) (should not have a trailing-slash, like '/news/'; '/news' is correct.)
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const menuItems = [
     { key: '0', label: 'Home', href: '/' },
     { key: '1', label: 'Profile', href: '/profile'},
     { key: '2', label: user?.name || "",  href: '', disabled: true },
   ];
-  // Don't touch this code, use it in your Menu component from Antd
-  const router = useRouter();
-  const selectedKey = menuItems
-    .findIndex((item) => item.href === router.pathname)
-    .toString();
 
   const handleClick = (e: MenuInfo) => {
     const parsedKey = parseInt(e.key);
@@ -28,22 +21,51 @@ const CustomHeader = () => {
     router.push(menuItems[parsedKey].href);
   };
 
-  // Start editing here
-
-  return <Header style={{ display: "flex", alignItems: "center", width: "100%" }}>
-    <div style={{ width: "100%" }}>
-    <Menu
-        theme="dark"
-        mode="horizontal"
-        selectedKeys={[selectedKey]}
-        onClick={handleClick}
-        items={menuItems.map(item => ({
-          key: item.key,
-          label: item.label,
-        }))}
-      />
-    </div>
-  </Header>;
+  return (
+    <Header 
+      style={{ 
+        display: "flex", 
+        alignItems: "center", 
+        padding: "0 24px",
+        height: "64px"  // Standard Ant Design header height
+      }}
+    >
+      <div style={{ 
+        width: "100%", 
+        display: "flex", 
+        justifyContent: "space-between",
+        alignItems: "center"  // This centers items vertically
+      }}>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          selectedKeys={[router.pathname]}
+          onClick={handleClick}
+          style={{ flex: 1 }}  // This allows the menu to take up available space
+          items={menuItems.map(item => ({
+            key: item.key,
+            label: item.label,
+          }))}
+        />
+        {user && (
+          <Button 
+            type="primary" 
+            danger 
+            onClick={logout}
+            style={{ 
+              marginLeft: '16px',
+              height: '32px',  // Standard Ant Design button height
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            Logout
+          </Button>
+        )}
+      </div>
+    </Header>
+  );
 };
 
 export default CustomHeader;
