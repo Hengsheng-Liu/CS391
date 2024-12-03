@@ -108,6 +108,7 @@ export default function LoginPage() {
           </Button>
         </Form.Item>
       </Form>
+      
       <Button 
         type="link" 
         onClick={() => {
@@ -117,6 +118,7 @@ export default function LoginPage() {
         style={{ padding: 0 }}
       >
         {signUp ? 'Already have an account? Log in' : "Don't have an account? Sign up"}
+
       </Button>
     </div>
   );

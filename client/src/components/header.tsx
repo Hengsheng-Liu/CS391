@@ -11,10 +11,8 @@ const CustomHeader = () => {
 
   const menuItems = [
     { key: '0', label: 'Home', href: '/' },
-    { key: '1', label: 'Post', href: '/post' },
-    { key: '2', label: 'Register', href: '/register' },
-    { key: '3', label: 'Profile', href: '/profile' },
-    { key: '4', label: user?.name || "", href: '', disabled: true },
+    { key: '1', label: 'Profile', href: '/profile'},
+    { key: '2', label: user?.name || "",  href: '', disabled: true },
   ];
 
   const handleClick = (e: MenuInfo) => {
