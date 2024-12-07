@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/router';
 
+// Define user object
 interface User {
   id: number;
   email: string;
   name: string;
 }
 
+// Define shape of auth context
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
@@ -14,6 +16,7 @@ interface AuthContextType {
   loading: boolean;
 }
 
+// Initialize auth context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -21,6 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Load user data from localStorage on initial render
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -29,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
+  // Update user state and localStorage
   const handleSetUser = (newUser: User | null) => {
     setUser(newUser);
     if (newUser) {
@@ -38,11 +43,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Handle user logout
   const logout = () => {
     handleSetUser(null);
     router.push('/login');
   };
 
+  // Provide the auth context to children
   return (
     <AuthContext.Provider value={{ 
       user, 
