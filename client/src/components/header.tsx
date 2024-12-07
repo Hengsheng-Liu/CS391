@@ -6,15 +6,18 @@ import { useAuth } from "@/contexts/UserContext";
 const { Header } = Layout;
 
 const CustomHeader = () => {
+  // Access user data and logout function from auth context
   const { user, logout } = useAuth();
   const router = useRouter();
 
+  // Define menu item labels and routes
   const menuItems = [
     { key: '0', label: 'Home', href: '/' },
     { key: '1', label: 'Profile', href: '/profile'},
-    { key: '2', label: user?.name || "",  href: '', disabled: true },
+    { key: '2', label: user?.name || "",  href: '', disabled: true }, // display user name when possible
   ];
 
+  // Handle menu click for navigation
   const handleClick = (e: MenuInfo) => {
     const parsedKey = parseInt(e.key);
     if (parsedKey < 0 || parsedKey >= menuItems.length) return;
@@ -47,6 +50,7 @@ const CustomHeader = () => {
             label: item.label,
           }))}
         />
+        {/* Render logout button if user is authenticated */}
         {user && (
           <Button 
             type="primary" 
