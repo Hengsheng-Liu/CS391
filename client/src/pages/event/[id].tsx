@@ -101,7 +101,6 @@ export default function EventDetail() {
           );
           setCouldWithdraw(
             new Date(data.expiration) > new Date() &&
-            data.rsvp_count > 0 &&
             data.participants.some((participant:User) => participant.id == user?.id)
             && data.host_id != user?.id
           );
