@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Typography, Spin, Card, Button } from "antd";
+import { Typography, Spin, Card, Button, Flex } from "antd";
 import { useAuth } from "@/contexts/UserContext";
 
 const { Title, Paragraph } = Typography;
@@ -134,7 +134,13 @@ export default function EventDetail() {
         </Paragraph>
         <Paragraph>{event.description}</Paragraph>
         <Paragraph>
-          <strong>Location:</strong> {event.location}
+          <strong>Location:</strong>   <a
+    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(event.location)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {event.location}
+  </a>
         </Paragraph>
         <Paragraph>
           <strong>RSVP Count:</strong> {event.rsvp_count}
@@ -170,9 +176,15 @@ export default function EventDetail() {
       {couldJoin && <Button type="primary" onClick={() => joinEvent()}>
         Join Event
       </Button>}
-      {host && <Button type ="primary" onClick={() => cancelEvent()}>
+      {host && 
+      <Flex gap="small">
+      <Button type="primary" onClick={() => router.push(`/event/create?eventId=${id}`)}>
+        Edit Event
+      </Button>
+        <Button type ="primary" onClick={() => cancelEvent()}>
         Cancel Event
-      </Button>}
+      </Button>
+      </Flex>}
       {couldWithdraw &&
         <Button type="primary" onClick={() => withdrawEvent()}>
         Withdraw from Event

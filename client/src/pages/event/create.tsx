@@ -1,73 +1,80 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { Form, Input, InputNumber, DatePicker, Button, Typography } from "antd";
-const { Title } = Typography;
 import moment from "moment";
 import { useAuth } from "@/contexts/UserContext";
-import { useRouter } from "next/router";
-const Backend = "http://localhost:8000";
 
-interface Event {
-  name: string;
-  food_type: string;
-  description: string;
-  location: string;
-  rsvp_count: number;
-  servings: number;
-  expiration: string; // ISO string
-  created_at: string; // ISO string
-  host_id: number;
-  create_by: string;
-}
+const { Title } = Typography;
 
 export default function CreateEvent() {
+  const router = useRouter();
+  const { eventId } = router.query; // Get eventId from query parameters
   const { user } = useAuth();
   const [form] = Form.useForm();
-  const [formData, setFormData] = useState<Event | null>(null);
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  async function createEvent(event: Event) {
+  useEffect(() => {
+    if (eventId) {
+      // Fetch the existing event data to prepopulate the form
+      fetch(`../api/events/${eventId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          form.setFieldsValue({
+            ...data,
+            expiration: moment(data.expiration), // Format expiration date for DatePicker
+            created_at: moment(data.created_at), // Format created_at date for DatePicker
+          });
+        })
+        .catch((err) => {
+          setError("Failed to load event data");
+          console.error(err);
+        });
+    }
+  }, [eventId]);
+
+  const handleSubmit = async (values: any) => {
+    const formattedData = {
+      ...values,
+      expiration: values.expiration?.toISOString(),
+      created_at: values.created_at?.toISOString(),
+      host_id: user?.id || -1,
+      create_by: user?.name || "Unknown",
+    };
+
+    const endpoint = eventId
+      ? `../api/events/${eventId}` // Update existing event
+      : `../api/events`; // Create new event
+
+    const method = eventId ? "PUT" : "POST";
+
     try {
-      const response = await fetch(`../api/events`, {
-        method: "POST",
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(event), 
+        body: JSON.stringify(formattedData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || "Error creating event");
+        throw new Error(data.detail || "Error processing event");
       }
-      router.push("/");
-    } catch (error:any) {
+
+      router.push("/"); // Redirect to the homepage after success
+    } catch (error: any) {
       setError(error.message);
-      }
-  }
-
-  const onFinish = async (values: any) => {
-    const formattedData: Event = {
-      ...values,
-      expiration: values.expiration?.toISOString(), 
-      created_at: values.created_at?.toISOString(), 
-      host_id: user?.id || -1, 
-      create_by: user?.name || "Unknown", 
-    };
-
-    console.log("Formatted Form Data:", formattedData);
-    setFormData(formattedData);
-    const response = await createEvent(formattedData);
+    }
   };
 
   return (
     <div style={{ padding: 20 }}>
-      <Title level={2}>Food Event Form</Title>
+      <Title level={2}>{eventId ? "Update Event" : "Create Event"}</Title>
       <Form
         form={form}
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={handleSubmit}
         initialValues={{
           name: "",
           food_type: "",
@@ -75,14 +82,14 @@ export default function CreateEvent() {
           location: "",
           rsvp_count: 0,
           servings: 0,
-          expiration: null, // Default expiration as null
-          created_at: moment(), // Default to current time
+          expiration: null,
+          created_at: moment(),
         }}
       >
         <Form.Item
           label="Name"
           name="name"
-          rules={[{ required: true, message: "Please enter the name" }]}
+          rules={[{ required: true, message: "Please enter the event name" }]}
         >
           <Input placeholder="Enter event name" />
         </Form.Item>
@@ -145,7 +152,7 @@ export default function CreateEvent() {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            {eventId ? "Update Event" : "Create Event"}
           </Button>
         </Form.Item>
       </Form>

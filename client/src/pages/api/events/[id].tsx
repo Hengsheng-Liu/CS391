@@ -28,8 +28,23 @@ export default async function handler(
         }
         return res.status(200).json(data);
       }
+      case 'PUT': {
+        const {  name, food_type, description,location,rsvp_count,servings,expiration,created_at,host_id,create_by } = req.body;
+        const response = await fetch(`${Backend}/events/event/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, food_type, description,location,rsvp_count,servings,expiration,created_at,host_id,create_by }),
+        });
+        const data = await response.json();
+        if(!response.ok){
+            return res.status(response.status).json(data);
+        }
+        return res.status(200).json(data);
+      }
       default:
-        res.setHeader('Allow', ['GET']);
+        res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
         res.status(405).json({ message: `Method ${req.method} not allowed` });
     }
   } catch (error:any) {
