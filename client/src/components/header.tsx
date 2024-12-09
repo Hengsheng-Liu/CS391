@@ -1,9 +1,11 @@
 import React from "react";
 import { Layout, Menu, Button } from "antd";
+import { MailTwoTone } from '@ant-design/icons';
 import { MenuInfo } from "rc-menu/lib/interface";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/UserContext";
 const { Header } = Layout;
+
 
 const CustomHeader = () => {
   const { user, logout } = useAuth();
@@ -47,6 +49,19 @@ const CustomHeader = () => {
             label: item.label,
           }))}
         />
+        <MailTwoTone
+          type = "primary"
+          danger
+          twoToneColor={ '#eb2f96' }
+          onClick = {'notify-placeholder'}
+          style = {{
+            fontSize: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          </MailTwoTone>
         {user && (
           <Button 
             type="primary" 
