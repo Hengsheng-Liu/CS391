@@ -38,8 +38,8 @@ def get_all_participants(db: Session, event_id: int):
         participants.append(object)
     return participants
 #Get event by food type
-def get_event_by_food_type(db: Session, food_type: str):
-    return db.query(EventDB).filter(EventDB.food_type == food_type).all()
+# def get_event_by_food_type(db: Session, food_type: str):
+#     return db.query(EventDB).filter(EventDB.food_type == food_type).all()
 #Create all events
 def get_events(db: Session, skip: int = 0, limit: int = 10):
     return db.query(EventDB).offset(skip).limit(limit).all()

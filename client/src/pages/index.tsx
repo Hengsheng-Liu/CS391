@@ -28,15 +28,15 @@ const { Title } = Typography;
 interface Event {
   id: number;
   name: string;
-  food_type: string;
   description: string;
   location: string;
   rsvp_count: number;
-  servings: number;
   expiration: string;
   created_at: string;
   host_id: number;
   create_by: number;
+  allergies: string[];
+  cuisine: string[];
 }
 
 // Define the main Home component
@@ -131,11 +131,19 @@ export default function Home() {
       key: "expiration",
       render: (text: string) => new Date(text).toLocaleString(), // Format expiration date and time
     },
-    {
-      title: "Total Servings",
-      dataIndex: "servings",
-      key: "servings",
-    },
+
+{
+  title: "Allergies",
+  dataIndex: "allergies",
+  key: "allergies",
+  render: (allergies: string[]) => allergies.join(", "), // Assuming allergies is an array of strings
+},
+{
+  title: "Cuisine",
+  dataIndex: "cuisine",
+  key: "cuisine",
+  render: (cuisine: string[]) => cuisine.join(", "), // Assuming cuisine is an array of strings
+},
     {
       title: "RSVP Spots Left",
       dataIndex: "rsvp_count",

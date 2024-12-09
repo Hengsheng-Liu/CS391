@@ -17,16 +17,16 @@ interface User {
 interface Event {
   id: number;
   name: string;
-  food_type: string;
   description: string;
   location: string;
   rsvp_count: number;
-  servings: number;
   expiration: string;
   created_at: string;
   host_id: number;
   create_by: string;
   participants: User[];
+  allergies: string[];
+  cuisine: string[];
 }
 
 // Main EventDetail component
@@ -165,9 +165,6 @@ export default function EventDetail() {
       <Card style={{ marginBottom: 20 }}>
         <Title>{event.name}</Title>
         <Title level={3}>Host Email: {user?.email}</Title>
-        <Paragraph>
-          <strong>Food Type:</strong> {event.food_type}
-        </Paragraph>
         <Paragraph>{event.description}</Paragraph>
         <Paragraph>
           <strong>Location:</strong>{" "}
@@ -185,9 +182,6 @@ export default function EventDetail() {
           <strong>RSVP Count:</strong> {event.rsvp_count}
         </Paragraph>
         <Paragraph>
-          <strong>Servings:</strong> {event.servings}
-        </Paragraph>
-        <Paragraph>
           <strong>Expiration:</strong> {new Date(event.expiration).toLocaleString()}
         </Paragraph>
         <Paragraph>
@@ -198,6 +192,12 @@ export default function EventDetail() {
         </Paragraph>
         <Paragraph>
           <strong>Created By:</strong> {event.create_by}
+        </Paragraph>
+        <Paragraph>
+          <strong>Allergies:</strong> {event.allergies.join(", ")}
+        </Paragraph>
+        <Paragraph>
+          <strong>Cuisine:</strong> {event.cuisine.join(", ")}
         </Paragraph>
       </Card>
 

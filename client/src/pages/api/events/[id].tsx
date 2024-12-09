@@ -48,7 +48,6 @@ export default async function handler(
         // Extract the event data from the request body
         const {
           name,
-          food_type,
           description,
           location,
           rsvp_count,
@@ -57,6 +56,8 @@ export default async function handler(
           created_at,
           host_id,
           create_by,
+          allergies,
+          cuisine
         } = req.body;
 
         // Update the event with the specified ID
@@ -67,7 +68,6 @@ export default async function handler(
           },
           body: JSON.stringify({
             name,
-            food_type,
             description,
             location,
             rsvp_count,
@@ -76,6 +76,8 @@ export default async function handler(
             created_at,
             host_id,
             create_by,
+            allergies,
+            cuisine
           }),
         });
 

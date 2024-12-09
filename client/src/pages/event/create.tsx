@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Form, Input, InputNumber, DatePicker, Button, Typography } from "antd";
+import { Form, Input, InputNumber, DatePicker, Button, Typography, Select } from "antd";
+const { Option } = Select;
 const { Title } = Typography; // Destructure Title for easier usage
 import moment from "moment"; // Import moment for date handling
 import { useAuth } from "@/contexts/UserContext"; // Custom hook for user authentication
@@ -8,18 +9,50 @@ import { useRouter } from "next/router"; // Next.js router for navigation
 // Backend API base URL (can be moved to an environment variable for better management)
 const Backend = "http://localhost:8000";
 
+
+
+const allergiesOptions = [
+  'dairy-free',
+  'gluten-free',
+  'peanut-free',
+  'shellfish-free',
+  'soy-free',
+  'tree_nut-free',
+];
+
+const cuisineOptions = [
+  'American',
+  'Chinese',
+  'French',
+  'Indian',
+  'Italian',
+  'Japanese',
+  'Korean',
+  'Mexican',
+  'Thai',
+  'Vietnamese',
+];
+
+const locationOptions = [
+  'Warren Towers',
+  'West Campus',
+  'East Campus',
+  'South Campus',
+  'Bay State Road',
+];
+
 // Define the Event interface for type safety
 interface Event {
   name: string;
-  food_type: string;
   description: string;
   location: string;
   rsvp_count: number;
-  servings: number;
   expiration: string; // ISO string for expiration
   created_at: string; // ISO string for creation date
   host_id: number; // ID of the event host
   create_by: string; // Name of the creator
+  allergies: string[]; // List of allergies
+  cuisine: string[]; // List of cuisines
 }
 
 export default function CreateEvent() {
@@ -109,11 +142,11 @@ export default function CreateEvent() {
         onFinish={onFinish} // Handle form submission
         initialValues={{
           name: "",
-          food_type: "",
           description: "",
           location: "",
           rsvp_count: 0,
-          servings: 0,
+          allergiesOptions: [],
+          cuisineOptions: [],
           expiration: null, // Default expiration as null
           created_at: moment(), // Default to current time
         }}
@@ -129,11 +162,17 @@ export default function CreateEvent() {
 
         {/* Food Type field */}
         <Form.Item
-          label="Food Type"
-          name="food_type"
-          rules={[{ required: true, message: "Please enter the food type" }]}
+          label="Cuisine Type"
+          name="cuisine"
+          rules={[{ required: true, message: "Please select the type of cuisine" }]}
         >
-          <Input placeholder="Enter food type" />
+          <Select mode="multiple" placeholder="Select cuisine types">
+            {cuisineOptions.map((cuisine) => (
+              <Option key={cuisine} value={cuisine}>
+                {cuisine}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         {/* Description field */}
@@ -149,9 +188,15 @@ export default function CreateEvent() {
         <Form.Item
           label="Location"
           name="location"
-          rules={[{ required: true, message: "Please enter the location" }]}
+          rules={[{ required: true, message: "Please select a location" }]}
         >
-          <Input placeholder="Enter location" />
+          <Select placeholder="Select location">
+            {locationOptions.map((location) => (
+              <Option key={location} value={location}>
+                {location}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         {/* RSVP Count field */}
@@ -163,13 +208,18 @@ export default function CreateEvent() {
           <InputNumber min={0} placeholder="Enter RSVP count" />
         </Form.Item>
 
-        {/* Servings field */}
         <Form.Item
-          label="Servings"
-          name="servings"
-          rules={[{ required: true, message: "Please enter the number of servings" }]}
+          label="Allergies"
+          name="allergies"
+          rules={[{ required: false, message: "Please select any diet-friendly choices" }]}
         >
-          <InputNumber min={0} placeholder="Enter servings count" />
+          <Select mode="multiple" placeholder="Select allergies">
+            {allergiesOptions.map((allergy) => (
+              <Option key={allergy} value={allergy}>
+                {allergy}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         {/* Expiration Date field */}

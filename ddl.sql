@@ -1,6 +1,4 @@
-CREATE DATABASE CS391;
 
-\c CS391
 
 CREATE TABLE IF NOT EXISTS USERS (
     id SERIAL PRIMARY KEY,
@@ -12,17 +10,18 @@ CREATE TABLE IF NOT EXISTS USERS (
 
 CREATE TABLE IF NOT EXISTS EVENTS (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    description VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     location VARCHAR(255),
-    food_type VARCHAR(255),
-    rsvp_count INT,
-    servings INT,
-    created_at TIMESTAMP DEFAULT NOW(),
+    rsvp_count INTEGER,
     expiration TIMESTAMP,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES USERS(id)
+    created_at TIMESTAMP,
+    host_id INTEGER,
+    create_by VARCHAR(255),
+    allergies VARCHAR(255)[],
+    cuisine VARCHAR(255)[]
 );
+
 CREATE TABLE IF NOT EXISTS RSVP (
     id SERIAL PRIMARY KEY,
     user_id INT,

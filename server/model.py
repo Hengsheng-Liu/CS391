@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Sequence
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Sequence, ARRAY
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from datetime import datetime
 
@@ -21,15 +21,16 @@ class EventDB(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    food_type = Column(String, nullable=False)
     description = Column(String, nullable=False)
     location = Column(String, nullable=False)
     rsvp_count = Column(Integer, nullable=False)
-    servings = Column(Integer, nullable=False)
     expiration = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     host_id = Column(Integer, nullable=False)
     create_by = Column(String, nullable=False)
+    allergies = Column(ARRAY(String), nullable=True)  # Added allergies as ARRAY
+    location = Column(String, nullable=False)  
+    cuisine = Column(ARRAY(String), nullable=True)  # Added cuisine as ARRAY
 
 
 

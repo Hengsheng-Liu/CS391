@@ -3,15 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // Define an Event interface to provide type safety for event objects
 interface Event {
   name: string;
-  food_type: string;
   description: string;
   location: string;
   rsvp_count: number;
-  servings: number;
   expiration: string;
   created_at: string;
   host_id: number;
   create_by: number;
+  allergies: string[];
+  cuisine: string[];
 }
 
 // Backend API base URL
@@ -43,15 +43,15 @@ export default async function handler(
         // Extract event data from the request body
         const {
           name,
-          food_type,
           description,
           location,
           rsvp_count,
-          servings,
           expiration,
           created_at,
           host_id,
           create_by,
+          allergies,
+          cuisine
         } = req.body;
 
         // Send a POST request to the backend API to create a new event
@@ -62,15 +62,15 @@ export default async function handler(
           },
           body: JSON.stringify({
             name,
-            food_type,
             description,
             location,
             rsvp_count,
-            servings,
             expiration,
             created_at,
             host_id,
             create_by,
+            allergies,
+            cuisine
           }),
         });
 
