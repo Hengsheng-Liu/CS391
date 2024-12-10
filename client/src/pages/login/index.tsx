@@ -12,21 +12,25 @@ export default function LoginPage() {
   const router = useRouter();
   const [form] = Form.useForm();  
 
+  // Redirect to home if user is already logged in
   useEffect(() => {
     if (user) {
       router.push('/');
     }
   }, [user, router]);
 
+  // Handle form submission
   const handleSubmit = async (values: any) => {
     try {
       const { email, password, name, confirmPassword } = values;
 
+      // Check if passwords match for signup
       if (signUp && password !== confirmPassword) {
         message.error('Passwords do not match');
         return;
       }
 
+      // Send login/signup request to the server
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,6 +42,7 @@ export default function LoginPage() {
         throw new Error(data.detail || 'Error during authentication');
       }
       
+      // Set user in context and redirect to home
       setUser(data);
       router.push('/');
     } catch (error: any) {
@@ -45,6 +50,7 @@ export default function LoginPage() {
     }
   };
 
+  // Validate @bu.edu email domain
   const validateEmailDomain = (rule: any, value: string) => {
     if (value && !value.endsWith('@bu.edu')) {
       return Promise.reject('The input is not a valid @bu.edu email!');
