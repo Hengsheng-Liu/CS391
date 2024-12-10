@@ -6,16 +6,16 @@ import { useRouter } from "next/router";
 interface Event {
   id: number;
   name: string;
-  food_type: string;
   description: string;
   location: string;
   rsvp_count: number;
-  servings: number;
   expiration: string;
   created_at: string;
   host_id: number;
   create_by: string;
   participants: User[];
+  cuisine: string[];
+  allergies: string[];
 }
 
 interface User {
@@ -108,7 +108,7 @@ export default function Profile() {
             description={
               <>
                 <p>{event.description}</p>
-                <Tag color="blue">{event.food_type}</Tag>
+                <Tag color="blue">{event.cuisine}</Tag>
                 <Tag color="green">{new Date(event.expiration).toLocaleDateString()}</Tag>
               </>
             }

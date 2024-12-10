@@ -2,10 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from database import engine
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine
 
 from routers.user import router as user_router
 from routers.event import router as event_router
 from routers.rsvp import router as rsvp_router
+
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -18,7 +24,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Include routers
 app.include_router(user_router, prefix="/users", tags=["users"])

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from model import UserDB,EventDB,RsvpDB
 from schemas.user import UserResponse
 from schemas.event import EventCreate
+from send_email import send_email_notification
 
 #Create event 
 def create_event(db: Session, event: EventCreate):
@@ -10,6 +11,8 @@ def create_event(db: Session, event: EventCreate):
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+    # Call the send_email_notification function
+    send_email_notification(db_event)
     return db_event
 
 # update event
@@ -38,8 +41,8 @@ def get_all_participants(db: Session, event_id: int):
         participants.append(object)
     return participants
 #Get event by food type
-def get_event_by_food_type(db: Session, food_type: str):
-    return db.query(EventDB).filter(EventDB.food_type == food_type).all()
+# def get_event_by_food_type(db: Session, food_type: str):
+#     return db.query(EventDB).filter(EventDB.food_type == food_type).all()
 #Create all events
 def get_events(db: Session, skip: int = 0, limit: int = 10):
     return db.query(EventDB).offset(skip).limit(limit).all()
