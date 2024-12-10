@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // Backend API base URL
 const Backend = 'http://0.0.0.0:8000';
 
+
 // API route handler function
 export default async function handler(
   req: NextApiRequest,
@@ -61,6 +62,8 @@ export default async function handler(
         return res.status(200).json(data);
       }
 
+
+      // Handle unsupported HTTP methods
       default:
         // Handle unsupported HTTP methods
         res.setHeader('Allow', ['GET', 'POST', 'DELETE']); // Allowable methods

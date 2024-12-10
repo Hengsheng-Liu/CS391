@@ -3,11 +3,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // Backend API base URL
 const Backend = 'http://0.0.0.0:8000';
 
-// API route handler function
+
+// API handler function to process event-related requests
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  
   // Extract the `id` parameter from the query string
   const { id } = req.query;
 
@@ -26,6 +28,7 @@ export default async function handler(
 
         // Return the event details
         return res.status(200).json(data);
+
       }
 
       case 'DELETE': {
@@ -94,10 +97,12 @@ export default async function handler(
 
       default:
         // Handle unsupported HTTP methods
+
         res.setHeader('Allow', ['GET', 'PUT', 'DELETE']); // Specify allowed methods
         return res.status(405).json({
           message: `Method ${req.method} not allowed`,
         }); // Return 405 status code
+        
     }
   } catch (error: any) {
     // Catch and handle unexpected errors

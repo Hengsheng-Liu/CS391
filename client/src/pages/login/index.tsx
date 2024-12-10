@@ -26,6 +26,7 @@ export default function LoginPage() {
    * Effect to redirect logged-in users to the home page
    * - Runs whenever `user` or `router` changes
    */
+
   useEffect(() => {
     if (user) {
       router.push('/'); // Navigate to the home page if the user is authenticated
@@ -37,15 +38,19 @@ export default function LoginPage() {
    * - Sends form data to the backend API
    * - Handles success and error states
    */
+
   const handleSubmit = async (values: any) => {
     try {
       const { email, password, name, confirmPassword } = values;
 
+
       // Validate passwords match during sign-up
+
       if (signUp && password !== confirmPassword) {
         message.error('Passwords do not match');
         return;
       }
+
 
       // Send data to the API for authentication
       const response = await fetch('/api/auth/login', {
@@ -60,6 +65,7 @@ export default function LoginPage() {
         throw new Error(data.detail || 'Error during authentication');
       }
 
+
       // Set the authenticated user and navigate to the home page
       setUser(data);
       router.push('/');
@@ -69,10 +75,12 @@ export default function LoginPage() {
     }
   };
 
+
   /**
    * Custom validator to ensure email belongs to a specific domain
    * - Only allows emails ending with '@bu.edu'
    */
+
   const validateEmailDomain = (rule: any, value: string) => {
     if (value && !value.endsWith('@bu.edu')) {
       return Promise.reject('The input is not a valid @bu.edu email!');
