@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/UserContext";
 const { Title } = Typography;
 
+// Define the Event interface
 interface Event {
   id: number;
   name: string;
@@ -37,10 +38,13 @@ interface Event {
 
 export default function Home() {
 
+  // State for storing events and loading status
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const {user} = useAuth();
+
+  // Function to handle event deletion
   const handleDelete = async (id: number) => {
     try {
       const response = await fetch(`/api/events/${id}`, {
@@ -57,6 +61,8 @@ export default function Home() {
       console.error('Error deleting event:', error);
     }
   };
+
+  // Fetch events on component mount
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -75,6 +81,7 @@ export default function Home() {
     fetchEvents();
   }, []);
 
+     // Define table columns
     const columns = [
       {
         title: "Event Title",
@@ -123,6 +130,7 @@ export default function Home() {
         {loading ? (
           <Alert message="Loading events..." type="info" />
         ) : (
+          // Render table of events
           <Table         dataSource={events.map((event) => ({
             ...event,
             key: event.id,
