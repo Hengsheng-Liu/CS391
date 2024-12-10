@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from model import UserDB,EventDB,RsvpDB
 from schemas.user import UserResponse
 from schemas.event import EventCreate
+from send_email import send_email_notification
 
 #Create event 
 def create_event(db: Session, event: EventCreate):
@@ -10,6 +11,8 @@ def create_event(db: Session, event: EventCreate):
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+    # Call the send_email_notification function
+    send_email_notification(db_event)
     return db_event
 
 # update event

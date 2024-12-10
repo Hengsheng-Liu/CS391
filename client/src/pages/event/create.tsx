@@ -45,7 +45,7 @@ const locationOptions = [
 interface Event {
   name: string;
   description: string;
-  location: string;
+  location: string[];
   rsvp_count: number;
   expiration: string; // ISO string for expiration
   created_at: string; // ISO string for creation date
@@ -143,7 +143,8 @@ export default function CreateEvent() {
         initialValues={{
           name: "",
           description: "",
-          location: "",
+          location: [],
+          allergies: [],
           rsvp_count: 0,
           allergiesOptions: [],
           cuisineOptions: [],

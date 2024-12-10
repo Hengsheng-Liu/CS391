@@ -33,6 +33,11 @@ class EventDB(Base):
     cuisine = Column(ARRAY(String), nullable=True)  # Added cuisine as ARRAY
 
 
+# Subscriber Model
+class Subscriber(Base):
+    __tablename__ = "subscribers"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, nullable=False)
 
 # RSVP Model
 class RsvpDB(Base):
