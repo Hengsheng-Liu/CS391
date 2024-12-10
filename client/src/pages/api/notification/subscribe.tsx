@@ -1,53 +1,48 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from database import get_db
+from schemas.subscriber import Subscriber as SubscriberSchema
+from model import SubscriberDB
+from crud.subscriber import create_subscriber, get_subscriber, delete_subscriber
 
-// Backend API base URL
-const Backend = "http://localhost:8000";
+router = APIRouter()
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // Ensure the request method is POST
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']); // Specify allowed methods
-    return res.status(405).json({ message: `Method ${req.method} not allowed` }); // Return 405 for unsupported methods
-  }
+# Route to create a new subscriber
+@router.post("/notification/subscribe", status_code=201)
+async def create_subscriber_route(subscriber: SubscriberSchema, db: Session = Depends(get_db)):
+    try:
+        # Check if the email is already subscribed
+        existing_subscriber = db.query(SubscriberDB).filter(SubscriberDB.email == subscriber.email).first()
+        if (existing_subscriber):
+            raise HTTPException(status_code=400, detail="Email is already subscribed")
 
-  try {
-    // Extract required fields from the request body
-    const { email } = req.body;
+        # Create a new subscriber
+        new_subscriber = create_subscriber(db, subscriber)
+        db.commit()
+        return {"message": "Subscriber created successfully", "subscriber_id": new_subscriber.id}
+    except Exception as error:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to create subscriber. {error}")
 
-    if (!email) {
-      console.error('Email is required');
-      return res.status(400).json({ error: 'Email is required' });
-    }
+# Route to get subscriber by ID
+@router.get("/subscriber/{subscriber_id}")
+async def get_subscriber_route(subscriber_id: int, db: Session = Depends(get_db)):
+    try:
+        subscriber = get_subscriber(db, subscriber_id)
+        if subscriber:
+            return subscriber
+        else:
+            raise HTTPException(status_code=404, detail="Subscriber not found.")
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch subscriber. {error}")
 
-    // Make a POST request to the backend API to subscribe the user
-    const response = await fetch(`${Backend}/subscriber/notification/subscribe`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }), // Send email data
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Log specific error if email is already subscribed
-      if (response.status === 400 && data.detail === 'Email is already subscribed') {
-        console.error('Email is already subscribed:', email);
-      }
-      // Return the backend error response if subscription fails
-      return res.status(response.status).json(data);
-    }
-
-    // Return successful subscription response
-    return res.status(200).json(data);
-
-  } catch (error: any) {
-    // Handle unexpected errors and return a 500 Internal Server Error
-    console.error('Internal server error:', error.message || 'Internal server error');
-    res.status(500).json({ message: error.message || 'Internal server error' });
-  }
-}
+# Route to delete subscriber by ID
+@router.delete("/subscriber/{subscriber_id}")
+async def delete_subscriber_route(subscriber_id: int, db: Session = Depends(get_db)):
+    try:
+        delete_subscriber(db, subscriber_id)
+        db.commit()
+        return {"message": "Subscriber deleted successfully"}
+    except Exception as error:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to delete subscriber. {error}")

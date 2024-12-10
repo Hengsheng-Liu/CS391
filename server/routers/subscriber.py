@@ -1,28 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from schemas.subscriber import Subscriber
+from database import get_db
+from schemas.subscriber import Subscriber as SubscriberSchema
+from model import SubscriberDB
 from crud.subscriber import create_subscriber, get_subscriber, delete_subscriber
 
 router = APIRouter()
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 # Route to create a new subscriber
-@router.post("/notification/subscribe")
-async def create_subscriber_route(subscriber: Subscriber, db: Session = Depends(get_db)):
+@router.post("/notification/subscribe", status_code=201)
+async def create_subscriber_route(subscriber: SubscriberSchema, db: Session = Depends(get_db)):
     try:
         # Check if the email is already subscribed
-        existing_subscriber = db.query(Subscriber).filter(Subscriber.email == subscriber.email).first()
-        if existing_subscriber:
+        existing_subscriber = db.query(SubscriberDB).filter(SubscriberDB.email == subscriber.email).first()
+        if (existing_subscriber):
             raise HTTPException(status_code=400, detail="Email is already subscribed")
 
+        # Create a new subscriber
         new_subscriber = create_subscriber(db, subscriber)
         db.commit()
         return {"message": "Subscriber created successfully", "subscriber_id": new_subscriber.id}
