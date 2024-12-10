@@ -3,6 +3,7 @@ import { Typography, Card, List, Button, Tabs, Tag, Spin } from "antd";
 import { useAuth } from "@/contexts/UserContext";
 import { useRouter } from "next/router";
 
+// Interfaces for Event and User types
 interface Event {
   id: number;
   name: string;
@@ -23,9 +24,9 @@ interface User {
   name: string;
   email: string;
   role: string;
-  member_since: string;
 }
 
+// Define Profile component
 export default function Profile() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function Profile() {
   const [rsvpedEvents, setRsvpedEvents] = useState<Event[]>([]);
   const [activeTab, setActiveTab] = useState('1');
 
+  // Effect hook for authentication and data fetching
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
@@ -87,6 +89,7 @@ export default function Profile() {
     return null;
   }
 
+  // Component for rendering event lists
   const EventList = ({ events, type }: { events: Event[], type: string }) => (
     <List
       itemLayout="vertical"
@@ -166,14 +169,6 @@ export default function Profile() {
             </Typography.Text>
           </div>
 
-          <div>
-            <Typography.Text strong style={{ fontSize: "16px", display: "block", color: "#666" }}>
-              Member Since
-            </Typography.Text>
-            <Typography.Text style={{ fontSize: "18px" }}>
-              {new Date().toLocaleDateString()}
-            </Typography.Text>
-          </div>
         </div>
       </Card>
 

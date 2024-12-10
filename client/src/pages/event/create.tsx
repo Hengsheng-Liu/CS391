@@ -63,6 +63,7 @@ export default function CreateEvent() {
   const [error, setError] = useState<string | null>(null); // State to handle error messages
   const { eventId } = router.query; // Get `eventId` from query parameters for edit functionality
 
+
   // Effect to fetch existing event data when editing an event
   useEffect(() => {
     if (eventId) {
@@ -248,7 +249,6 @@ export default function CreateEvent() {
           </Button>
         </Form.Item>
       </Form>
-
       {/* Display error message if any */}
       {error && <Typography.Text type="danger">{error}</Typography.Text>}
     </div>
