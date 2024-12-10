@@ -24,7 +24,6 @@ interface User {
   name: string;
   email: string;
   role: string;
-  member_since: string;
 }
 
 // Define Profile component
@@ -170,14 +169,6 @@ export default function Profile() {
             </Typography.Text>
           </div>
 
-          <div>
-            <Typography.Text strong style={{ fontSize: "16px", display: "block", color: "#666" }}>
-              Member Since
-            </Typography.Text>
-            <Typography.Text style={{ fontSize: "18px" }}>
-              {new Date().toLocaleDateString()}
-            </Typography.Text>
-          </div>
         </div>
       </Card>
 
