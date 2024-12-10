@@ -26,6 +26,7 @@ export default function CreateEvent() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
+  // Function to create a new event
   async function createEvent(event: Event) {
     try {
       const response = await fetch(`../api/events`, {
@@ -47,6 +48,7 @@ export default function CreateEvent() {
       }
   }
 
+  // Function to handle form submission
   const onFinish = async (values: any) => {
     const formattedData: Event = {
       ...values,
@@ -79,6 +81,7 @@ export default function CreateEvent() {
           created_at: moment(), // Default to current time
         }}
       >
+        {/* Form items for each field in the Event interface */}
         <Form.Item
           label="Name"
           name="name"
@@ -149,6 +152,7 @@ export default function CreateEvent() {
           </Button>
         </Form.Item>
       </Form>
+      {/* Conditional error message */}
       {error && <Typography.Text type="danger">{error}</Typography.Text>}
     </div>
   );
