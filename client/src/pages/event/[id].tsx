@@ -31,6 +31,7 @@ interface Event {
 
 // Main EventDetail component
 export default function EventDetail() {
+
   // Initialize router for navigation
   const router = useRouter();
   const { id } = router.query; // Get the event ID from the query parameters
@@ -153,6 +154,7 @@ export default function EventDetail() {
     return <Spin tip="Loading event details..." />;
   }
 
+
   // Show error message if the event is not found
   if (!event) {
     return <Typography.Text type="danger">Event not found</Typography.Text>;
@@ -200,8 +202,7 @@ export default function EventDetail() {
           <strong>Cuisine:</strong> {event.cuisine.join(", ")}
         </Paragraph>
       </Card>
-
-      {/* Participants */}
+      {/* Participants list */}
       <Card title="Participants">
         {event.participants.map((participant) => (
           <Card key={participant.id}>

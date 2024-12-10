@@ -7,11 +7,13 @@ import { useRouter } from "next/router";
 const { Content, Footer } = Layout;
 
 const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
+  // Access user data and logout function from auth context
   const { user, loading } = useAuth();
   const router = useRouter();
   const lastPart = router.pathname.split('/').filter(Boolean).pop();
   const isPublicRoute = lastPart === "login";
 
+  // Force unauthenticated users to login page
   useEffect(() => {
     if (!loading && !user && !isPublicRoute) {
       router.push("/login");
@@ -37,8 +39,10 @@ const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
 
+  // Layout structure
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
+      {/* Render CustomHeader only for non-public routes */}
       {!isPublicRoute && <CustomHeader />}
       <Content style={{ padding: "0 50px", marginTop: 64 }}>
         <div

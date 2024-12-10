@@ -9,6 +9,7 @@ import axios from 'axios'; // Import axios for making HTTP requests
 const { Header } = Layout;
 
 const CustomHeader = () => {
+
   const { user, logout } = useAuth(); // Get user and logout function from the authentication context
   const router = useRouter(); // Get the router object for navigation
 
@@ -24,6 +25,7 @@ const CustomHeader = () => {
   ];
 
   // Handle menu item click
+
   const handleClick = (e: MenuInfo) => {
     const parsedKey = parseInt(e.key);
     if (parsedKey < 0 || parsedKey >= menuItems.length) return;
@@ -74,6 +76,7 @@ const CustomHeader = () => {
             label: item.label,
           }))}
         />
+
         <MailTwoTone
           type="primary"
           twoToneColor="#eb2f96"
@@ -95,6 +98,8 @@ const CustomHeader = () => {
             I want to receive email notifications for new events.
           </Checkbox>
         </Modal>
+
+        {/* Render logout button if user is authenticated */}   
         {user && (
           <Button 
             type="primary" 

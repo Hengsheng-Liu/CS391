@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/UserContext";
 // Destructure Typography for cleaner usage
 const { Title } = Typography;
 
+
 // Define the structure of an Event object using a TypeScript interface
 interface Event {
   id: number;
@@ -41,6 +42,7 @@ interface Event {
 
 // Define the main Home component
 export default function Home() {
+
   // State to store events and loading status
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -131,7 +133,6 @@ export default function Home() {
       key: "expiration",
       render: (text: string) => new Date(text).toLocaleString(), // Format expiration date and time
     },
-
 {
   title: "Allergies",
   dataIndex: "allergies",
