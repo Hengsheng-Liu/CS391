@@ -1,21 +1,19 @@
 import React, { useState } from "react";
-import { Layout, Menu, Button, Modal, Checkbox, message } from "antd";
+import { Layout, Menu, Button, message } from "antd";
 import { MailTwoTone } from '@ant-design/icons';
 import { MenuInfo } from "rc-menu/lib/interface";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/UserContext";
-import axios from 'axios'; // Import axios for making HTTP requests
+import SubscribeModal from "./SubscribeModal"; // Import the SubscribeModal component
 
 const { Header } = Layout;
 
 const CustomHeader = () => {
-
   const { user, logout } = useAuth(); // Get user and logout function from the authentication context
   const router = useRouter(); // Get the router object for navigation
 
-  // State to manage the visibility of the modal and the checkbox state
+  // State to manage the visibility of the modal
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   // Menu items for navigation
   const menuItems = [
@@ -25,7 +23,6 @@ const CustomHeader = () => {
   ];
 
   // Handle menu item click
-
   const handleClick = (e: MenuInfo) => {
     const parsedKey = parseInt(e.key);
     if (parsedKey < 0 || parsedKey >= menuItems.length) return;
@@ -37,23 +34,8 @@ const CustomHeader = () => {
     setIsModalVisible(true);
   };
 
-  // Handle modal OK button click to subscribe to email notifications
-  const handleOk = async () => {
-    if (isChecked && user?.email) {
-      try {
-        const response = await axios.post('/api/notification/subscribe', { email: user.email });
-        console.log('Response:', response.data);
-        message.success('Subscribed to email notifications!');
-      } catch (error) {
-        console.error('Error:', error.response?.data || error.message);
-        message.error('Failed to subscribe to email notifications.');
-      }
-    }
-    setIsModalVisible(false);
-  };
-
-  // Handle modal Cancel button click
-  const handleCancel = () => {
+  // Handle modal close
+  const handleModalClose = () => {
     setIsModalVisible(false);
   };
 
@@ -88,16 +70,10 @@ const CustomHeader = () => {
             justifyContent: 'center'
           }}
         />
-        <Modal
-          title="Subscribe to Email Notifications"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <Checkbox checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>
-            I want to receive email notifications for new events.
-          </Checkbox>
-        </Modal>
+        <SubscribeModal
+          isVisible={isModalVisible}
+          onClose={handleModalClose}
+        />
 
         {/* Render logout button if user is authenticated */}   
         {user && (
