@@ -23,7 +23,7 @@ Ensure that you have Docker and Docker Compose installed on your system to easil
 4. Run the following commands to start the database container:
    ```bash
    docker compose down --volumes
-   docker compose up
+   docker compose up --build
 5. Navigate to the server folder and install the Python dependencies:
    ```bash 
    pipenv install
