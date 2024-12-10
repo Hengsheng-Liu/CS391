@@ -1,46 +1,113 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { useRouter } from 'next/router';
 
+// Backend API base URL
 const Backend = 'http://0.0.0.0:8000';
+
 
 // API handler function to process event-related requests
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-    // Extract the event ID from the query parameters
-    const {id} = req.query;
+  
+  // Extract the `id` parameter from the query string
+  const { id } = req.query;
+
   try {
     // Handle different HTTP methods
     switch (req.method) {
       case 'GET': {
-         // Handle fetching a specific event (GET request)
+        // Fetch event details by ID
         const response = await fetch(`${Backend}/events/event/id/${id}`);
         const data = await response.json();
-        if(!response.ok){
-            return res.status(response.status).json(data);
-        }
-        return res.status(200).json(data);
+
+        if (!response.ok) {
+          // If the backend response is not OK, forward the error response
+          return res.status(response.status).json(data);
         }
 
+        // Return the event details
+        return res.status(200).json(data);
+
+      }
+
       case 'DELETE': {
-        // Handle event deletion (DELETE request)
+        // Delete the event with the specified ID
         const response = await fetch(`${Backend}/events/event/${id}`, {
           method: 'DELETE',
         });
         const data = await response.json();
-        if(!response.ok){
-            return res.status(response.status).json(data);
+
+        if (!response.ok) {
+          // If the backend response is not OK, forward the error response
+          return res.status(response.status).json(data);
         }
+
+        // Return a success response after deletion
+        return res.status(200).json(data);
+      }
+
+      case 'PUT': {
+        // Extract the event data from the request body
+        const {
+          name,
+          description,
+          location,
+          rsvp_count,
+          servings,
+          expiration,
+          created_at,
+          host_id,
+          create_by,
+          allergies,
+          cuisine
+        } = req.body;
+
+        // Update the event with the specified ID
+        const response = await fetch(`${Backend}/events/event/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            description,
+            location,
+            rsvp_count,
+            servings,
+            expiration,
+            created_at,
+            host_id,
+            create_by,
+            allergies,
+            cuisine
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          // If the backend response is not OK, forward the error response
+          return res.status(response.status).json(data);
+        }
+
+        // Return the updated event data
         return res.status(200).json(data);
       }
 
       default:
         // Handle unsupported HTTP methods
-        res.setHeader('Allow', ['GET']);
-        res.status(405).json({ message: `Method ${req.method} not allowed` });
+
+        res.setHeader('Allow', ['GET', 'PUT', 'DELETE']); // Specify allowed methods
+        return res.status(405).json({
+          message: `Method ${req.method} not allowed`,
+        }); // Return 405 status code
+        
     }
-  } catch (error:any) {
-    res.status(500).json({ message: `Internal server error: ${error.message}` });
+  } catch (error: any) {
+    // Catch and handle unexpected errors
+    res.status(500).json({
+      message: `Internal server error: ${error.message}`,
+    });
   }
 }

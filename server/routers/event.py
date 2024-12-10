@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from schemas.event import EventCreate, EventResponse
 from database import get_db
-from crud.event import create_event, delete_event, get_event, get_events, get_event_by_food_type,get_all_participants, update_event
+from crud.event import create_event, delete_event, get_event, get_events, get_all_participants, update_event
 from crud.rsvp import delete_rsvp, get_rsvp
 router = APIRouter()
 
