@@ -3,22 +3,21 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
-from model import SubscriberDB
+from model import Subscriber
 
 # Function to send email notifications to all subscribers about a new event
 def send_email_notification(event):
     db = SessionLocal()  # Create a new database session
-    subscribers = db.query(subscribers).all()  # Query all subscribers from the database
+    subscribers = db.query(Subscriber).all()  # Query all subscribers from the database
     for subscriber in subscribers:
         send_email(subscriber.email, event)  # Send an email to each subscriber
 
 # Function to send an email to a specific email address about a new event
 def send_email(to_email, event):
-    from_email = "jay@898522@gmail.com"
-    from_password = "Fakepassword21!"
-    to_email = "intogamerx123@gmail.com"
+    from_email = "your_email@example.com"  # Replace with your email address
+    from_password = "your_password"  # Replace with your email password
     subject = "New Event Created"  # Subject of the email
-    body = f"A new event '{event.name}' has been created."  # Body of the email
+    body = f"A new event '{event['name']}' has been created."  # Body of the email
 
     # Create a MIME multipart message
     msg = MIMEMultipart()

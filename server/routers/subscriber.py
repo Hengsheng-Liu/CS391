@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas.subscriber import Subscriber as SubscriberSchema
-from model import SubscriberDB
+from model import Subscriber as SubscriberDB
 from crud.subscriber import create_subscriber, get_subscriber, delete_subscriber
 
 router = APIRouter()
@@ -13,7 +13,7 @@ async def create_subscriber_route(subscriber: SubscriberSchema, db: Session = De
     try:
         # Check if the email is already subscribed
         existing_subscriber = db.query(SubscriberDB).filter(SubscriberDB.email == subscriber.email).first()
-        if (existing_subscriber):
+        if existing_subscriber:
             raise HTTPException(status_code=400, detail="Email is already subscribed")
 
         # Create a new subscriber

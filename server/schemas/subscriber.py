@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class Subscriber(BaseModel):
-    user_id : int
-    email: str
+    id: int
+    email: EmailStr
+
     class Config:
-        orm_mode = True
+        from_attributes = True
