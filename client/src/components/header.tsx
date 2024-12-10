@@ -45,7 +45,7 @@ const CustomHeader = () => {
         console.log('Response:', response.data);
         message.success('Subscribed to email notifications!');
       } catch (error) {
-        console.error('Error:', error.response?.data || error.message);
+        //console.error('Error:', error.response?.data || error.message);
         message.error('Failed to subscribe to email notifications.');
       }
     }
