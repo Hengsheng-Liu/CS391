@@ -25,6 +25,7 @@ interface Event {
 }
 
 export default function EventDetail() {
+  // Hooks for routing, authentication, and state management
   const router = useRouter();
   const { id } = router.query;
   const { user } = useAuth();
@@ -35,6 +36,7 @@ export default function EventDetail() {
   const [couldWithdraw, setCouldWithdraw] = useState<Boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Function to join an event
   const joinEvent = async () => {
     try {
       const response = await fetch(`../api/rsvp`, {
@@ -53,6 +55,8 @@ export default function EventDetail() {
       setError(error.message);
     }
   };
+
+  // Function to withdraw from an event
   const withdrawEvent = async () => {
     try {
       const response = await fetch(`../api/rsvp?rsvpId=${id}&userId=${user?.id}`, {
@@ -68,6 +72,8 @@ export default function EventDetail() {
       setError(error.message);
     }
   }
+
+  // Function to cancel an event
   const cancelEvent = async () => {
     try {
       const response = await fetch(`../api/events/${id}`, {
@@ -82,6 +88,8 @@ export default function EventDetail() {
       setError(error.message);
     }
   }
+
+   // Effect hook to fetch event details
   useEffect(() => {
     if (id) {
       fetch(`../api/events/${id}`)
@@ -109,26 +117,31 @@ export default function EventDetail() {
         .finally(() => setLoading(false));
     }
   }, [loading]);
+
+  // Effect hook to determine if the current user is the host
   useEffect(() => {
     if (event) {
       setHost(event.host_id == user?.id);
     }
   }, [event]);
   
-
+  // Render loading spinner while fetching data
   if (loading) {
     return <Spin tip="Loading event details..." />;
   }
 
+  // Render error message if event not found
   if (!event) {
     return <Typography.Text type="danger">Event not found</Typography.Text>;
   }
 
+  // Render event details
   return (
     <div style={{ padding: 20 }}>
       <Card style={{ marginBottom: 20 }}>
         <Title>{event.name}</Title>
         <Title level={3}>Host Email: {user?.email}</Title>
+        {/* Event details */}
         <Paragraph>
           <strong>Food Type:</strong> {event.food_type}
         </Paragraph>
@@ -155,6 +168,7 @@ export default function EventDetail() {
           <strong>Created By:</strong> {event.create_by}
         </Paragraph>
       </Card>
+      {/* Participants list */}
       <Card title="Participants">
         {event.participants.map((participant) => (
           <Card key={participant.id}>
@@ -167,6 +181,7 @@ export default function EventDetail() {
           </Card>
         ))}
       </Card>
+      {/* Conditional rendering of join/cancel/withdraw buttons */}
       {couldJoin && <Button type="primary" onClick={() => joinEvent()}>
         Join Event
       </Button>}
