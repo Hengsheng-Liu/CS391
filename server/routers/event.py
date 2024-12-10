@@ -18,6 +18,7 @@ async def create_event_route(event: EventCreate, db: Session = Depends(get_db)):
         db.rollback()
         print(error)
         raise HTTPException(status_code=500, detail=f"Failed to create event. {error}")
+#Router to delete event by ID
 @router.delete("/event/{event_id}")
 async def delete_event_route(event_id: int, db: Session = Depends(get_db)):
     try:

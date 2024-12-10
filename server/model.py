@@ -34,7 +34,7 @@ class EventDB(Base):
 
 
 # Subscriber Model
-class Subscriber(Base):
+class SubscriberDB(Base):
     __tablename__ = "subscribers"
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, nullable=False)

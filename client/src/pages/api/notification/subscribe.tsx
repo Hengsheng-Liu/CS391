@@ -1,24 +1,20 @@
-// FILE: pages/api/notification/subscribe.ts
-
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
 
-// Create a new PostgreSQL connection pool
-const pool = new Pool({
-  user: 'p_user',
-  host: 'localhost',
-  database: 'hw6_postgres',
-  password: 'p_password',
-  port: 5432,
-});
+// Backend API base URL
+const Backend = "http://localhost:8000";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Ensure the request method is POST
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']); // Specify allowed methods
     return res.status(405).json({ message: `Method ${req.method} not allowed` }); // Return 405 for unsupported methods
   }
 
   try {
+    // Extract required fields from the request body
     const { email } = req.body;
 
     if (!email) {
@@ -26,28 +22,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Email is required' });
     }
 
-    // Check if the email is already subscribed
-    const client = await pool.connect();
-    try {
-      const result = await client.query('SELECT * FROM subscribers WHERE email = $1', [email]);
+    // Make a POST request to the backend API to subscribe the user
+    const response = await fetch(`${Backend}/subscriber/notification/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }), // Send email data
+    });
 
-      if (result.rows.length > 0) {
-        console.error('Email is already subscribed');
-        return res.status(400).json({ error: 'Email is already subscribed' });
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Log specific error if email is already subscribed
+      if (response.status === 400 && data.detail === 'Email is already subscribed') {
+        console.error('Email is already subscribed:', email);
       }
-
-      // Add the email to the subscribers table
-      await client.query('INSERT INTO subscribers (email) VALUES ($1)', [email]);
-      console.log('Subscribed successfully');
-      return res.status(200).json({ message: 'Subscribed successfully' });
-    } catch (queryError) {
-      console.error('Database query error:', queryError);
-      return res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      client.release();
+      // Return the backend error response if subscription fails
+      return res.status(response.status).json(data);
     }
-  } catch (error) {
-    console.error('Internal server error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+
+    // Return successful subscription response
+    return res.status(200).json(data);
+
+  } catch (error: any) {
+    // Handle unexpected errors and return a 500 Internal Server Error
+    console.error('Internal server error:', error.message || 'Internal server error');
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 }
