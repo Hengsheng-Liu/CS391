@@ -19,8 +19,8 @@ def send_email_notification(event):
 
 # Function to send an email to a specific email address about a new event
 def send_email(to_email, event):
-    from_email = "jay898522@gmail.com"
-    from_password = "jaxp znag pirc hnco"  # Use the App Password generated from Google
+    from_email = "no"
+    from_password = "no"  # Use the App Password generated from Google
     subject = "New Event Created"  # Subject of the email
     body = f"A new event '{event.name}' has been created."  # Use dot notation to access the event name
 
