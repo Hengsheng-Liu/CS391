@@ -14,39 +14,6 @@ export default function Profile() {
       router.push('/login');
       return;
     }
-
-    /* if (user?.id) {
-      const fetchEvents = async () => {
-        try {
-          // Fetch all events
-          const eventsResponse = await fetch("/api/events");
-          const eventsData = await eventsResponse.json();
-          
-          // Filter events created by the user
-          const userEvents = eventsData.filter((event: Event) => event.host_id === user.id);
-          setCreatedEvents(userEvents);
-
-          // For each event, fetch its detailed version that includes participants
-          const detailedEvents = await Promise.all(
-            eventsData.map(async (event: Event) => {
-              const detailResponse = await fetch(`/api/events/${event.id}`);
-              return detailResponse.json();
-            })
-          );
-
-          // Filter events where the user is a participant
-          const userRsvpedEvents = detailedEvents.filter((event: Event) => 
-            event.participants?.some((participant: User) => participant.id === user.id)
-          );
-          
-          setRsvpedEvents(userRsvpedEvents);
-        } catch (error) {
-          console.error("Error fetching events:", error);
-        }
-      };
-
-      fetchEvents();
-    } */
   }, [user, loading, router]);
 
   // Show loading state
@@ -67,17 +34,23 @@ export default function Profile() {
     <div style={{ padding: "24px" }}>
       <h1>About</h1>
       <p>
-        Spark!Bytes is a platform for seeking out and sharing free food opportunities around campus. Those with a BU email can sign
-        up. 
+        Spark!Bytes is a platform for seeking out and sharing free food opportunities around campus. Anyone with a BU email can sign
+        up!
       </p>
       <p>
-        On the Home page, one can view and RSVP for the currently active events and click on the Create event button to post about their own
-        free food opportunity.
+        On the Home page, users can view currently active events or press the Create event button to post about their own
+        free food opportunity. Clicking on any event's title will take you to its particular page, where you can view more information
+        about the event. If they created it, they can make edits to it or cancel it here. If they didn't create it, they can RSVP for it
+        or withdraw their RSVP here.
       </p>
       <p>
         Under the Profile page, users can see account related information as well as events that they are 
-        signed up for or have created. It is here that they can also modify events they created or withdraw from events that they RSVPed
-        for.
+        signed up for or have created and can access the same event information as above by clicking "View Event".
+      </p>
+      <p>
+        Finally, users can sign up for email notifications whenever an event is created by clicking on the mail icon in the upper
+        right hand corner and just next to that is the logout button for when users are ready to head out into the wide world of 
+        free food!
       </p>
     </div>
   );
