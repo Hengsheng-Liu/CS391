@@ -10,8 +10,7 @@ const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
   // Access user data and logout function from auth context
   const { user, loading } = useAuth();
   const router = useRouter();
-  const lastPart = router.pathname.split('/').filter(Boolean).pop();
-  const isPublicRoute = lastPart === "login";
+  const isPublicRoute = router.pathname === "/login";
 
   // Force unauthenticated users to login page
   useEffect(() => {
@@ -41,18 +40,14 @@ const LayoutComponent = ({ children }: { children: React.ReactNode }) => {
 
   // Layout structure
   return (
-    <Layout className="layout" style={{ minHeight: "100vh" }}>
-      {/* Render CustomHeader only for non-public routes */}
-      {!isPublicRoute && <CustomHeader />}
-      <Content style={{ padding: "0 50px", marginTop: 64 }}>
-        <div
-          className="site-layout-content"
-          style={{ padding: 24, minHeight: 380, height: "100%" }}
-        >
+    <Layout style={{ minHeight: "100vh" }}>
+      <CustomHeader />
+      <Content style={{ padding: "24px", background: "#fff" }}>
+        <div style={{ padding: 24, minHeight: 380 }}>
           {children}
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ textAlign: 'center', background: '#f0f2f5' }}>
         Spark!Bytes ©{new Date().getFullYear()} Created by Spark!
       </Footer>
     </Layout>

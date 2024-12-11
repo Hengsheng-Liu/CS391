@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Typography, Card, List, Button, Tabs, Tag, Spin } from "antd";
 import { useAuth } from "@/contexts/UserContext";
 import { useRouter } from "next/router";
+import { UserOutlined, MailOutlined, IdcardOutlined } from '@ant-design/icons';
 
 // Interfaces for Event and User types
 interface Event {
@@ -28,7 +29,7 @@ interface User {
 
 // Define Profile component
 export default function Profile() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuth() as { user: User | null; loading: boolean };
   const router = useRouter();
   const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
   const [rsvpedEvents, setRsvpedEvents] = useState<Event[]>([]);
@@ -143,6 +144,7 @@ export default function Profile() {
         
         <div style={{ display: "grid", gap: "20px" }}>
           <div>
+            <UserOutlined style={{ marginRight: 8 }} />
             <Typography.Text strong style={{ fontSize: "16px", display: "block", color: "#666" }}>
               Name
             </Typography.Text>
@@ -152,6 +154,7 @@ export default function Profile() {
           </div>
 
           <div>
+            <MailOutlined style={{ marginRight: 8 }} />
             <Typography.Text strong style={{ fontSize: "16px", display: "block", color: "#666" }}>
               Email
             </Typography.Text>
@@ -161,14 +164,14 @@ export default function Profile() {
           </div>
 
           <div>
+            <IdcardOutlined style={{ marginRight: 8 }} />
             <Typography.Text strong style={{ fontSize: "16px", display: "block", color: "#666" }}>
               Role
             </Typography.Text>
             <Typography.Text style={{ fontSize: "18px" }}>
-              Student
+              {"Student"}
             </Typography.Text>
           </div>
-
         </div>
       </Card>
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Typography, Spin, Card, Button, Flex } from "antd";
 import { useAuth } from "@/contexts/UserContext";
+import { EnvironmentOutlined, UsergroupAddOutlined, ClockCircleOutlined, CalendarOutlined, IdcardOutlined, AlertOutlined, ForkOutlined } from '@ant-design/icons';
 
 // Destructure Typography for easier usage
 const { Title, Paragraph } = Typography;
@@ -114,7 +115,7 @@ export default function EventDetail() {
    */
   useEffect(() => {
     if (id) {
-      fetch(`../api/events/${id}`)
+      fetch(`/api/events/${id}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error("Failed to fetch event");
@@ -138,7 +139,7 @@ export default function EventDetail() {
         .catch((err) => console.error("Error fetching event:", err))
         .finally(() => setLoading(false)); // Stop loading after the fetch
     }
-  }, [loading]);
+  }, [id]);
 
   /**
    * Determine if the user is the host of the event
@@ -147,13 +148,12 @@ export default function EventDetail() {
     if (event) {
       setHost(event.host_id === user?.id);
     }
-  }, [event]);
+  }, [event, user]);
 
   // Show loading spinner while fetching event details
   if (loading) {
     return <Spin tip="Loading event details..." />;
   }
-
 
   // Show error message if the event is not found
   if (!event) {
@@ -164,62 +164,68 @@ export default function EventDetail() {
   return (
     <div style={{ padding: 20 }}>
       {/* Event details */}
-      <Card style={{ marginBottom: 20 }}>
+      <Card
+        style={{ marginBottom: 20, borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+      >
+        <img 
+          alt="Event" 
+          src="/img/Digital_Gan_Warren3-1-1-400x288.jpg" 
+          style={{ width: '90%', maxWidth: '900px', borderRadius: '8px 8px 0 0' }} 
+        />
         <Title>{event.name}</Title>
-        <Title level={3}>Host Email: {user?.email}</Title>
         <Paragraph>{event.description}</Paragraph>
         <Paragraph>
-          <strong>Location:</strong>{" "}
-          <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-              event.location
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {event.location}
-          </a>
+          <EnvironmentOutlined style={{ marginRight: 8 }} />
+          <strong>Location:</strong> {event.location}
         </Paragraph>
         <Paragraph>
+          <UsergroupAddOutlined style={{ marginRight: 8 }} />
           <strong>RSVP Count:</strong> {event.rsvp_count}
         </Paragraph>
         <Paragraph>
+          <ClockCircleOutlined style={{ marginRight: 8 }} />
           <strong>Expiration:</strong> {new Date(event.expiration).toLocaleString()}
         </Paragraph>
         <Paragraph>
+          <CalendarOutlined style={{ marginRight: 8 }} />
           <strong>Created At:</strong> {new Date(event.created_at).toLocaleString()}
         </Paragraph>
         <Paragraph>
+          <IdcardOutlined style={{ marginRight: 8 }} />
           <strong>Host ID:</strong> {event.host_id}
         </Paragraph>
         <Paragraph>
+          <IdcardOutlined style={{ marginRight: 8 }} />
           <strong>Created By:</strong> {event.create_by}
         </Paragraph>
         <Paragraph>
-          <strong>Allergies:</strong> {event.allergies.join(", ")}
+          <AlertOutlined style={{ marginRight: 8 }} />
+          <strong>Allergies:</strong> {event.allergies.join(", ") || "None"}
         </Paragraph>
         <Paragraph>
-          <strong>Cuisine:</strong> {event.cuisine.join(", ")}
+          <ForkOutlined style={{ marginRight: 8 }} />
+          <strong>Cuisine:</strong> {event.cuisine.join(", ") || "None"}
+        </Paragraph>
+        <Paragraph>
+          <strong>Participants:</strong>
+          <ul>
+            {event.participants.map(participant => (
+              <li key={participant.id}>
+                {participant.name} - {participant.email}
+              </li>
+            ))}
+          </ul>
         </Paragraph>
       </Card>
-      {/* Participants list */}
-      <Card title="Participants">
-        {event.participants.map((participant) => (
-          <Card key={participant.id}>
-            <Paragraph>
-              <strong>Name:</strong> {participant.name}
-            </Paragraph>
-            <Paragraph>
-              <strong>Email:</strong> {participant.email}
-            </Paragraph>
-          </Card>
-        ))}
-      </Card>
-
       {/* Action buttons */}
       {couldJoin && (
         <Button type="primary" onClick={() => joinEvent()}>
           Join Event
+        </Button>
+      )}
+      {couldWithdraw && (
+        <Button type="primary" onClick={() => withdrawEvent()}>
+          Withdraw from Event
         </Button>
       )}
       {host && (
@@ -231,11 +237,6 @@ export default function EventDetail() {
             Cancel Event
           </Button>
         </Flex>
-      )}
-      {couldWithdraw && (
-        <Button type="primary" onClick={() => withdrawEvent()}>
-          Withdraw from Event
-        </Button>
       )}
       {/* Display errors, if any */}
       {error && <Typography.Text type="danger">{error}</Typography.Text>}

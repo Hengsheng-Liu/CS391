@@ -15,11 +15,13 @@ import {
   Col,
   Row,
   Popconfirm,
+  Spin,
 } from "antd";
 import { useRouter } from "next/router";
 import { link } from "fs"; // Unused import, consider removing it
 import Link from "next/link";
 import { useAuth } from "@/contexts/UserContext";
+import { PlusCircleOutlined } from '@ant-design/icons'; // Import icon
 
 // Destructure Typography for cleaner usage
 const { Title } = Typography;
@@ -166,24 +168,31 @@ export default function Home() {
       {/* Show loading state or display events table */}
       {loading ? (
         // Show loading alert while events are being fetched
-        <Alert message="Loading events..." type="info" />
+        <Spin tip="Loading events..." />
       ) : (
         // Display the table of events
-        <Table
-          dataSource={events.map((event) => ({
-            ...event,
-            key: event.id, // Add a key property for React rendering
-          }))}
-          columns={columns}
-          pagination={false} // Disable pagination for the table
-        />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+          {events.map(event => (
+            <Card
+              key={event.id}
+              hoverable
+              style={{ width: 300, borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+              cover={<img alt="Event" src="/img/Digital_Gan_Warren3-1-1-400x288.jpg" />} // Updated to use the specified image
+            >
+              <Card.Meta title={event.name} description={event.description} />
+              <Button type="primary" onClick={() => router.push(`/event/${event.id}`)} style={{ marginTop: '10px' }}>
+                View Event
+              </Button>
+            </Card>
+          ))}
+        </div>
       )}
 
       {/* Pagination component for navigating between event pages */}
       <Pagination defaultCurrent={1} total={events.length} />
 
       {/* Button to navigate to the event creation page */}
-      <Button type="primary" onClick={() => router.push("/event/create")}>
+      <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => router.push("/event/create")}>
         Create Event
       </Button>
     </div>
