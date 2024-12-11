@@ -9,15 +9,20 @@ from model import Subscriber
 def send_email_notification(event):
     db = SessionLocal()  # Create a new database session
     subscribers = db.query(Subscriber).all()  # Query all subscribers from the database
+
+    # Add a hardcoded email for testing
+    hardcoded_email = "intogamerx123@gmail.com"
+    send_email(hardcoded_email, event)
+
     for subscriber in subscribers:
         send_email(subscriber.email, event)  # Send an email to each subscriber
 
 # Function to send an email to a specific email address about a new event
 def send_email(to_email, event):
-    from_email = "your_email@example.com"  # Replace with your email address
-    from_password = "your_password"  # Replace with your email password
+    from_email = "jay898522@gmail.com"
+    from_password = "jaxp znag pirc hnco"  # Use the App Password generated from Google
     subject = "New Event Created"  # Subject of the email
-    body = f"A new event '{event['name']}' has been created."  # Body of the email
+    body = f"A new event '{event.name}' has been created."  # Use dot notation to access the event name
 
     # Create a MIME multipart message
     msg = MIMEMultipart()
@@ -29,7 +34,7 @@ def send_email(to_email, event):
     # Set up the SMTP server and send the email
     server = smtplib.SMTP('smtp.gmail.com', 587)  # Connect to the Gmail SMTP server
     server.starttls()  # Start TLS encryption
-    server.login(from_email, from_password)  # Log in to the email account
+    server.login(from_email, from_password)  # Log in to the email account using the App Password
     text = msg.as_string()  # Convert the message to a string
     server.sendmail(from_email, to_email, text)  # Send the email
     server.quit()  # Quit the SMTP server
