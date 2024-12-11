@@ -18,8 +18,9 @@ const CustomHeader = () => {
   // Menu items for navigation
   const menuItems = [
     { key: '0', label: 'Home', href: '/' },
-    { key: '1', label: 'Profile', href: '/profile' },
-    { key: '2', label: user?.name || "", href: '', disabled: true },
+    { key: '1', label: 'About', href: '/about' },
+    { key: '2', label: 'Profile', href: '/profile' },
+    { key: '3', label: user?.name || "", href: '', disabled: true },
   ];
 
   // Handle menu item click
