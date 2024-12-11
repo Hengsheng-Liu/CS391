@@ -10,19 +10,15 @@ def send_email_notification(event):
     db = SessionLocal()  # Create a new database session
     subscribers = db.query(Subscriber).all()  # Query all subscribers from the database
 
-    # Add a hardcoded email for testing
-    hardcoded_email = "intogamerx123@gmail.com"
-    send_email(hardcoded_email, event)
-
     for subscriber in subscribers:
         send_email(subscriber.email, event)  # Send an email to each subscriber
 
 # Function to send an email to a specific email address about a new event
 def send_email(to_email, event):
-    from_email = "no"
-    from_password = "no"  # Use the App Password generated from Google
-    subject = "New Event Created"  # Subject of the email
-    body = f"A new event '{event.name}' has been created."  # Use dot notation to access the event name
+    from_email = "jay898522"
+    from_password = "jaxp znag pirc hnco"  # Use the App Password generated from Google
+    subject = "New Event Created!"  # Subject of the email
+    body = f"A new event '{event.name}' has been created at {event.location}."  # Use dot notation to access the event name
 
     # Create a MIME multipart message
     msg = MIMEMultipart()

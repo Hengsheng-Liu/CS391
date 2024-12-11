@@ -4,7 +4,6 @@ from model import UserDB, EventDB, RsvpDB
 from schemas.user import UserResponse
 from schemas.event import EventCreate
 from send_email import send_email_notification
-
 # Create event 
 def create_event(db: Session, event: EventCreate):
     db_event = EventDB(**event.dict())
