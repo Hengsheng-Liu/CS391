@@ -18,14 +18,30 @@ def send_email(to_email, event):
     from_email = "jay898522"
     from_password = "jaxp znag pirc hnco"  # Use the App Password generated from Google
     subject = "New Event Created!"  # Subject of the email
-    body = f"A new event '{event.name}' has been created at {event.location}."  # Use dot notation to access the event name
+    body = f"""
+    <html>
+    <body>
+        <h2>New Event Created!</h2>
+        <p>A new event <strong>{event.name}</strong> has been created at <strong>{event.location}</strong>.</p>
+        <p><strong>Event Details:</strong></p>
+        <ul>
+            <li><strong>Name:</strong> {event.name}</li>
+            <li><strong>Location:</strong> {event.location}</li>
+            <li><strong>Description:</strong> {event.description}</li>
+            <li><strong>Created At:</strong> {event.created_at}</li>
+            <li><strong>Expires At:</strong> {event.expiration}</li>
+        </ul>
+        <p>We hope to see you there!</p>
+    </body>
+    </html>
+    """  # Use HTML to format the email body
 
     # Create a MIME multipart message
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = to_email
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))  # Attach the email body to the message
+    msg.attach(MIMEText(body, 'html'))  # Attach the email body to the message as HTML
 
     # Set up the SMTP server and send the email
     server = smtplib.SMTP('smtp.gmail.com', 587)  # Connect to the Gmail SMTP server
