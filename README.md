@@ -1,7 +1,7 @@
 # Spark Bytes
 
 **Project Title:** Spark Bytes  
-**Project Plan:** [Link to Project Plan](https://docs.google.com/document/d/10pkAZIoFl5MzBUSwCCxR0NGx_LZfaYNjJFyO7zmyBfA/edit)
+**Project Plan:** [Link to Project Plan](https://docs.google.com/document/d/10pkAZIoFl5MzBUSwCCxR0NGx_LZfaYNjJFyO7zmyBfA/edit)  
 **Project Presentation:** [Link to Presentation](https://www.canva.com/design/DAGYRxQR4Xk/jl817EXH7SGQtsTktT3SXA/edit)
 ### Overview
 Spark Bytes is a full-stack application designed to showcase seamless integration between a Next.js frontend and a FastAPI backend. The layout and design are planned using Draw.IO, creating a clear visual structure for the application's architecture.
